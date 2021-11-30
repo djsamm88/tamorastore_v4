@@ -148,7 +148,7 @@ echo($ses_cab[0]->kode_cabang);
           <?php } ?>
             
 
-          <?php if($this->session->userdata('level') !=5) {?> 
+          <?php if($this->session->userdata('level') !=5 && $this->session->userdata('level') !=7 ) {?> 
       <!-- AREA CHART -->
           <div class="box box-primary">
             <div class="box-header with-border">
@@ -178,6 +178,12 @@ echo($ses_cab[0]->kode_cabang);
             if($this->session->userdata('level')==5){
 
                 include "isi_pelanggan.php";
+              } 
+
+
+            if($this->session->userdata('level')==7){
+
+                include "isi_sales.php";
               } 
             ?> 
 

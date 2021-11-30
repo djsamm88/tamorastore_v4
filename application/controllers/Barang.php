@@ -21,6 +21,7 @@ class Barang extends CI_Controller {
 		$this->load->model('m_ekspedisi');
 		$this->load->model('m_gudang');
 		$this->load->model('m_cabang');
+		$this->load->model('m_admin');
 
 	}
 
@@ -153,11 +154,25 @@ class Barang extends CI_Controller {
 		echo $data['grup_penjualan'];
 	}
 
+
+
+	//sales
+	public function data_sales($id_admin)
+	{
+		$q = $this->db->query("SELECT * FROM tbl_sales_transaksi WHERE id_sales='$id_admin'");
+		$data['all'] = $q->result();
+		$this->load->view('data_sales',$data);
+	}
+
+
+
 	public function go_jual()
 	{
 		$id_cabang = $this->session->userdata('id_cabang');
 		$data = $this->input->post();
 		$data['alamat'] = $data['alamat_lengkap']." - ".$data['alamat'];
+
+		
 		unset($data['alamat_lengkap']);
 
 
@@ -331,6 +346,33 @@ class Barang extends CI_Controller {
 			$this->db->insert('tbl_transaksi');
 		}
 		
+
+		// sales //
+
+		if($data['id_sales'] != "")
+		{	
+
+
+			$id_sales = preg_replace('/\D/', '', $data['id_sales']);
+
+
+			$q_sales = $this->m_admin->m_data_admin_by_id($id_sales);
+
+			if(count($q_sales)>0)
+			{
+				$persen_sales_hasil = ($q_sales[0]->persen_sales/100)*hanya_nomor($total_tanpa_diskon);
+
+				$arr_sales['grup_penjualan'] = $data['grup_penjualan'];
+				$arr_sales['id_sales'] 		 = $id_sales;
+				$arr_sales['jumlah_trx'] 	 = hanya_nomor($total_tanpa_diskon);
+				$arr_sales['hasil_sales'] 	 = ($persen_sales_hasil);
+				$arr_sales['persen_sales'] 	 = $q_sales[0]->persen_sales;
+
+				$this->db->set($arr_sales);
+				$this->db->insert('tbl_sales_transaksi');
+			}
+		}
+
 		
 		//utang/piutang
 

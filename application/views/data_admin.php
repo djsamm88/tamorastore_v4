@@ -39,6 +39,7 @@
               <th>Telp</th>           
               <th>Level</th>           
               <th>Cabang</th>           
+              <th>ID_SALES</th>           
               <th>Action</th>
               
         </tr>
@@ -55,6 +56,17 @@
 
 
           $level = level($x->level);
+
+          $id_sales = "-";
+          $btn_sales = "";
+          if($x->level=="7")
+          {
+            $id_sales = "SALES".$x->id_admin;
+
+            $btn_sales = "<button class='btn btn-success btn-xs' onclick='persen_sales($x->id_admin);return false;'>Persen Sales</button>";
+
+          }
+
             
             echo (" 
               
@@ -66,6 +78,7 @@
                 <td>$x->telp_admin</td>
                 <td>$level</td>
                 <td>$x->kode_cabang - $x->nama_cabang</td>
+                <td>$id_sales  $btn_sales</td>
                 <td>
                   $btn
                 </td>
@@ -132,6 +145,7 @@
                   <option value="3"><?php echo level('3')?></option>
                   <option value="4"><?php echo level('4')?></option>
                   <option value="6"><?php echo level('6')?></option>
+                  <option value="7"><?php echo level('7')?></option>
               </select>
             </div>
             <div style="clear: both;"></div><br>
@@ -216,6 +230,48 @@
 </div>
 
 
+
+
+
+
+<!-- Modal sales-->
+<div id="myModal_Sales" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Persen Sales</h4>
+      </div>
+      <div class="modal-body">
+          <form id="form_persen_Sales">
+            <input type="hidden" name="id_admin" id="id_admin_sales" class="form-control" readonly="readonly">
+            
+            <div class="col-sm-4">Persen</div>
+            <div class="col-sm-8">
+              <input type="text" name="persen_sales" id="persen_sales" required="required" class="form-control decimal" placeholder="Persen">
+            <small>Masukkan hanya nomor. Tidak ikut %.</small>
+            </div>
+
+            <div style="clear: both;"></div><br>
+            <div id="t4_info_form_sales"></div>
+            <button type="submit" class="btn btn-primary"> Simpan </button>
+          </form>
+            
+
+          <div style="clear: both;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
 <script>
 $('.datepicker').datepicker({
   autoclose: true,
@@ -223,11 +279,50 @@ $('.datepicker').datepicker({
 })
 
 
+hanya_nomor(".nomor");
+
+$('.decimal').keyup(function(){
+    var val = $(this).val();
+    if(isNaN(val)){
+         val = val.replace(/[^0-9\.]/g,'');
+         if(val.split('.').length>2) 
+             val =val.replace(/\.+$/,"");
+    }
+    $(this).val(val); 
+});
+
 $(document).ready(function(){
 
   $('#tbl_newsnya').dataTable();
 
 });
+
+/******** sales ********/
+function persen_sales(id_admin)
+{
+   $.get("<?php echo base_url()?>index.php/admin/data_admin_by_id/"+id_admin,function(e){
+    //alert(e[0].persen_sales);
+    $("#persen_sales").val(e[0].persen_sales);
+    $("#id_admin_sales").val(e[0].id_admin);
+   })
+  $("#myModal_Sales").modal('show');
+}
+
+
+$("#form_persen_Sales").on("submit",function(){
+  $("#t4_info_form_sales").html('Loading...');
+  
+  var ser = $(this).serialize();
+
+  $.post("<?php echo base_url()?>index.php/admin/simpan_persen_sales",ser,function(x){
+    console.log(x);
+    $("#t4_info_form_sales").html('Berhasil...');
+  })
+
+  return false;
+})
+/********** sales *********/
+
 
 function edit_admin(id_admin)
 {

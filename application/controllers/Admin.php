@@ -43,6 +43,17 @@ class Admin extends CI_Controller {
 	}
 
 
+	public function simpan_persen_sales()
+	{
+		$id_admin = $this->input->post('id_admin');		
+		$serialize = $this->input->post();
+		
+		$this->m_admin->update_admin($serialize,$id_admin);
+		die('1');
+			
+	}
+
+
 	public function simpan_form()
 	{
 		$id_admin = $this->input->post('id_admin');		
@@ -52,6 +63,7 @@ class Admin extends CI_Controller {
 
 		//var_dump($serialize["user_admin"]);
 
+		
 
 
 		if($id_admin=='')
@@ -64,6 +76,9 @@ class Admin extends CI_Controller {
 			{
 				die('0');//sudah ada email atau username
 			}
+
+
+
 
 			$serialize["pass_admin"]=md5($serialize["pass_admin"]);
 			$this->m_admin->tambah_admin($serialize);

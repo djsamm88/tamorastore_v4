@@ -181,6 +181,8 @@ if(isset($group_penjualan))
         </tr>
 
 
+
+
         <td colspan="7" align="right"><b>Biaya ke ekspedisi</b></td>
           <td  align="right" >
             <input id="t4_transport_ke_ekspedisi" type="text" name="transport_ke_ekspedisi" class="form-control nomor" value="0" style="text-align:right;">
@@ -280,6 +282,18 @@ if(isset($group_penjualan))
           </td>
           <td></td>
         </tr>
+
+
+        
+        <tr>
+          <td colspan="7" align="right"><b>Sales</b></td>
+          <td  align="right" >
+            <input id="id_sales" type="text" name="id_sales" class="form-control " placeholder="id_sales" style="text-align:right;">
+          </td>
+          <td></td>
+        </tr>
+
+
 
       </tfoot>
   </table>

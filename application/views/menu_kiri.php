@@ -727,6 +727,50 @@
         <?php }?>
 
 
+
+
+        <?php 
+          //sales
+          if($this->session->userdata('level')=='7')
+          {?>
+             <li>
+              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/data','Master Barang');return false;">
+                <i class="fa fa-link"></i> <span>Data Barang</span>
+              </a>
+            </li>
+
+
+
+
+        <li class="treeview">
+          
+          <a href="#"><i class="fa fa-retweet"></i> <span>Persenan</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+          </a>
+            <ul class="treeview-menu">
+            <li>
+              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/data_sales/<?php echo $this->session->userdata('id_admin')?>','Sales Hasil');return false;">
+                <i class="fa fa-link"></i> <span>Data Hasil</span>
+              </a>
+            </li>
+
+
+
+
+          </ul>
+        </li>
+
+
+
+
+
+
+
+        
+        <?php }?>
+
         
         <li>
           <a href="#">
