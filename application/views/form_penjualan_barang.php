@@ -592,7 +592,7 @@ $( function() {
                 */
                 response($.map(data, function(obj) {
                     return {
-                        label: obj.nama_barang,
+                        label: obj.nama_barang +" - "+id,
                         value: obj.id,
                         stok: obj.qty,
                         harga_retail: obj.harga_retail, 

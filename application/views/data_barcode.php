@@ -59,7 +59,13 @@
                 <td>$x->nama_barang</td>                
                 <td>
                   <input name='id_barang[]' type='hidden' value='$x->id'>
-                  <input name='jumlah_barcode[]' class='form-control nomor' type=''></td>                
+                  <input name='jumlah_barcode[]' class='form-control nomor' type=''>
+                  <select name='is_id[]' class='form-control '>
+                      <option value='nama'>Nama Barang</option>
+                      <option value='id'>Id Barang</option>
+                  </select>
+
+                </td>                
                 
                 
               </tr>

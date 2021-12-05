@@ -64,6 +64,13 @@
           </ul>
         </li>
 
+         <li>
+              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/data_sales_admin','Trx Sales Hasil');return false;">
+                <i class="fa fa-link"></i> <span>Trx Sales</span>
+              </a>
+            </li>
+
+
 
 
         <li class="treeview">

@@ -164,6 +164,34 @@ class Barang extends CI_Controller {
 		$this->load->view('data_sales',$data);
 	}
 
+	public function data_sales_admin()
+	{
+		$q = $this->db->query("SELECT a.*,b.nama_admin,CONCAT('SALES',b.id_admin) AS id_sales  FROM tbl_sales_transaksi a LEFT JOIN tbl_admin b ON a.id_sales=b.id_admin ORDER BY a.id DESC");
+		$data['all'] = $q->result();
+		$this->load->view('data_sales_admin',$data);
+	}
+
+	public function bayar_sales()
+	{
+		$id = $this->input->post('id');
+		$tgl_bayar = date('Y-m-d H:i:s');
+
+		$this->db->query("UPDATE tbl_sales_transaksi SET status_bayar='lunas',tgl_bayar='$tgl_bayar' WHERE id='$id'");
+
+
+		//masukin ke tbl_transaksi dengan id 20
+
+		$q = $this->db->query("SELECT a.*,b.nama_admin,CONCAT('SALES',b.id_admin) AS id_sales  FROM tbl_sales_transaksi a LEFT JOIN tbl_admin b ON a.id_sales=b.id_admin WHERE a.id='$id'");
+		$all = $q->result();
+
+		$serialize['keterangan'] = "Kepada Sales A.n: ".$all[0]->nama_admin ." - Id Sales:".$all[0]->id_sales ."- Sejumlah: ".$all[0]->jumlah_trx; 
+		$serialize['jumlah'] = $all[0]->jumlah_trx;
+		$serialize['id_group'] = '20';
+		$serialize['id_cabang']=$this->session->userdata('id_cabang');
+		$this->db->set($serialize);
+		$this->db->insert('tbl_transaksi');
+
+	}
 
 
 	public function go_jual()
@@ -704,9 +732,11 @@ class Barang extends CI_Controller {
 
 				$id 			= $data['id_barang'][$i];
 				$jumlah_barcode = $data['jumlah_barcode'][$i];
+				$is_id 			= $data['is_id'][$i];
 
 				$x['id'] = $id;
-				$x['jumlah_barcode'] = $jumlah_barcode;
+				$x['jumlah_barcode']	= $jumlah_barcode;
+				$x['is_id'] 			= $is_id;
 
 				array_push($y,$x);
 			}
