@@ -630,6 +630,7 @@ class Barang extends CI_Controller {
 		echo json_encode($data['all']);
 	}
 
+
 	public	function json_barang_order()
 	{
 		header("Access-Control-Allow-Origin: *");

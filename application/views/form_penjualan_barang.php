@@ -583,7 +583,7 @@ $( function() {
 
     var semuaBarang = function(request,response){
             console.log(request.term);
-            var serialize = {cari:request.term};
+            var serialize = {cari:request.term}; 
             $.get("<?php echo base_url()?>index.php/barang/json_barang_toko",serialize,
               function(data){
                 /*
@@ -592,7 +592,7 @@ $( function() {
                 */
                 response($.map(data, function(obj) {
                     return {
-                        label: obj.nama_barang +" - "+id,
+                        label: obj.nama_barang +" - "+obj.id,
                         value: obj.id,
                         stok: obj.qty,
                         harga_retail: obj.harga_retail, 

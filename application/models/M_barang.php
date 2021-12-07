@@ -288,7 +288,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 								)b
 								ON a.id =b.id_barang	
 								LEFT JOIN tbl_gudang c ON b.id_gudang=c.id_gudang
-								WHERE b.id_gudang='$id_gudang' AND a.nama_barang LIKE '%$cari%' AND qty>0
+								WHERE b.id_gudang='$id_gudang' AND (a.nama_barang LIKE '%$cari%' OR a.id LIKE '%$cari%') AND qty>0
 								ORDER BY b.qty ASC
 					");
 		return $q;
