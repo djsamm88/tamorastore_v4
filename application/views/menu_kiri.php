@@ -203,6 +203,13 @@
 
 
 
+           <li>
+            <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/lap_penjualan_pelanggan/?id_pelanggan=6&mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Transaksi Penjualan');return false;">
+              <i class="fa fa-link"></i> <span>Penjualan Member</span>
+            </a>
+          </li>
+
+
         <li class="treeview">
           
           <a href="#"><i class="fa fa-users"></i> <span>Pelanggan</span>
@@ -223,13 +230,6 @@
                 <i class="fa fa-link"></i> <span>Transaksi</span>
               </a>
             </li>
-
-
-           <li>
-            <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/lap_penjualan_pelanggan/?id_pelanggan=6&mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Transaksi Penjualan');return false;">
-              <i class="fa fa-link"></i> <span>Lap.Penjualan </span>
-            </a>
-          </li>
 
 
             
