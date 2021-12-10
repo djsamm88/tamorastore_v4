@@ -18,7 +18,7 @@
 $ses_cab = $this->m_cabang->m_data_cabang_by_id($this->session->userdata('id_cabang'));
 echo $this->session->userdata('nama_admin'); 
 echo " - ";
-echo($ses_cab[0]->nama_cabang);
+echo($ses_cab[0]->nama_cabang); 
 echo " - ";
 echo($ses_cab[0]->kode_cabang);
 ?>

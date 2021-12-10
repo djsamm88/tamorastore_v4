@@ -1148,6 +1148,33 @@ class Barang extends CI_Controller {
 
 
 
+	public function lap_penjualan_pelanggan()
+	{
+		$mulai = $this->input->get('mulai');
+		$selesai = $this->input->get('selesai');
+		$id_cabang = $this->input->get('id_cabang');
+		$id_pelanggan = $this->input->get('id_pelanggan');
+
+		$id_admin 	= $this->session->userdata('id_admin');
+		$level 		= $this->session->userdata('level');
+
+
+		$data['mulai'] = $mulai;
+		$data['selesai'] = $selesai;
+		$data['id_cabang'] = $id_cabang;
+		$data['id_pelanggan'] = $id_pelanggan;
+
+		$data['pelanggan'] = $this->m_pelanggan->m_data();
+
+		$data['all'] = $this->m_barang->m_lap_penjualan_pelanggan($id_pelanggan,$mulai,$selesai,$id_cabang);	
+		$this->load->view('lap_penjualan_pelanggan',$data);
+	}
+
+
+	
+	
+
+
 	public function lap_penjualan_hapus()
 	{
 		$mulai = $this->input->get('mulai');
@@ -1239,7 +1266,7 @@ class Barang extends CI_Controller {
 	public function form_penjualan_pending($group_penjualan)
 	{
 
-		$data['all'] = $this->m_barang->m_data_gudang(1)->result();		
+		$data['all'] = $this->m_barang->m_data_gudang(1,$this->session->userdata('id_cabang'))->result();		
 		$data['pelanggan'] = $this->m_pelanggan->m_data();	
 		$data['eksepedisi'] = $this->m_ekspedisi->m_data();	
 		$data['group_penjualan'] = $group_penjualan;

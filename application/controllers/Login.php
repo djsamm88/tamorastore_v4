@@ -66,7 +66,7 @@ class Login extends CI_Controller {
 		$user = $this->gas($this->input->post('user_admin'));
 		$pass = md5($this->input->post('pass_admin'));
 
-		$bool = $this->m_login->cek_user($user,$pass);
+		$bool = $this->m_login->cek_user($user,$pass); 
 
 		//var_dump($bool);	
 

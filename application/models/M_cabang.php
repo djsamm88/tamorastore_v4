@@ -50,6 +50,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 	public function m_data_cabang_by_id($id_cabang)
 	{
 		$id_cabang = preg_replace('/\D/', '', $id_cabang);
+		
 		$id_cabang = $id_cabang*1;
 		$q = $this->db->query("SELECT a.*
 									FROM tbl_cabang a 
@@ -59,7 +60,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 		return $q->result();
 	}
 
-
+ 
 	public function cek_email_user($user,$email)
 	{
 		$query = $this->db->query("SELECT * FROM tbl_cabang WHERE user_cabang='$user' OR email_cabang='$email'");
