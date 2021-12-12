@@ -1121,6 +1121,56 @@ class Barang extends CI_Controller {
 			
 	}
 
+	public function lap_barang()
+	{
+		$mulai = $this->input->get('mulai');
+		$selesai = $this->input->get('selesai');
+		$id_cabang = $this->input->get('id_cabang');
+
+		$id_admin 	= $this->session->userdata('id_admin');
+		$level 		= $this->session->userdata('level');
+
+		if($level=='1')
+		{
+			$id_admin="";
+		}
+
+		$data['mulai'] = $mulai;
+		$data['selesai'] = $selesai;
+		$data['id_cabang'] = $id_cabang;
+
+		$data['all'] = $this->m_barang->m_lap_barang($mulai,$selesai,$id_admin,$id_cabang);	
+		$this->load->view('lap_barang',$data);
+	}
+
+
+	public function lap_barang_xl()
+	{
+		$mulai = $this->input->get('mulai');
+		$selesai = $this->input->get('selesai');
+		$id_cabang = $this->input->get('id_cabang');
+				$file = "laporan_detail_penjualan-$mulai-$selesai.xls";
+		header("Content-type: application/octet-stream");
+		header("Content-Disposition: attachment; filename=$file");
+		header("Pragma: no-cache");
+		header("Expires: 0");	
+
+
+		$id_admin 	= $this->session->userdata('id_admin');
+		$level 		= $this->session->userdata('level');
+
+		if($level=='1')
+		{
+			$id_admin="";
+		}
+
+		$data['mulai'] = $mulai;
+		$data['selesai'] = $selesai;
+		$data['id_cabang'] = $id_cabang;
+
+		$data['all'] = $this->m_barang->m_lap_barang($mulai,$selesai,$id_admin,$id_cabang);	
+		$this->load->view('lap_barang_xl',$data);
+	}
 
 
 
