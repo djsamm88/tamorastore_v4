@@ -592,6 +592,20 @@ class Barang extends CI_Controller {
 		$this->load->view('tbl_pembelian_barang',$data);
 	}
 
+	public function history_tbl_pembelian_barang()
+	{
+		$mulai = $this->input->get('mulai');
+		$selesai = $this->input->get('selesai');
+		$id_cabang = $this->input->get('id_cabang');
+		$data['all'] = $this->m_barang->history_tbl_pembelian_barang($id_cabang);
+		$data['mulai']=$mulai;
+		$data['selesai']=$selesai;
+		$data['id_cabang']=$id_cabang;
+
+		$this->load->view('tbl_pembelian_barang',$data);
+
+	}
+
 	public function form_penjualan()
 	{
 		$data['all'] = $this->m_barang->m_data_gudang(1,1)->result();		

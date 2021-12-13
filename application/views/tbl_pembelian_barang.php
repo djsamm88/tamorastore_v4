@@ -254,12 +254,13 @@ $("#form_update_status").on("submit",function(){
   return false;
 })
 
-
+ 
 function selesai_pembelian(group_trx)
 {
   if(confirm("Anda yakin selesai? Sudah cek semua barang?"))
   {
-    $.post("<?php echo base_url()?>index.php/barang/selesai_status_order",ser,function(){
+    $.post("<?php echo base_url()?>index.php/barang/selesai_status_order/"+group_trx,function(x){
+      console.log(x);
       alert("Berhasil.")
     })  
   }

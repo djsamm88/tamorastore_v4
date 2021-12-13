@@ -392,6 +392,12 @@
           </a>
         </li>
 
+        <li>
+          <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/history_tbl_pembelian_barang',' Order Suplier');return false;">
+            <i class="fa fa-shopping-cart"></i> <span>History Order</span>
+          </a>
+        </li>
+
 
         
         

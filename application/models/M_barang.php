@@ -22,6 +22,23 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 					FROM tbl_pembelian_barang a 
 					LEFT JOIN tbl_admin b 
 					ON a.id_admin=b.id_admin
+					WHERE status<>'Masuk'
+				GROUP BY a.group_trx
+				ORDER BY a.tgl DESC
+				");
+		
+		return $q->result();
+	}
+
+
+	public function history_tbl_pembelian_barang($id_cabang)
+	{
+		$q = $this->db->query("
+				SELECT a.*,b.nama_admin 
+					FROM tbl_pembelian_barang a 
+					LEFT JOIN tbl_admin b 
+					ON a.id_admin=b.id_admin
+					WHERE status='Masuk'
 				GROUP BY a.group_trx
 				ORDER BY a.tgl DESC
 				");
