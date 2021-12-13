@@ -42,6 +42,9 @@ class Barang extends CI_Controller {
 		$serialize['id_cabang'] = $id_cabang;
 		$this->db->set($serialize);
 		$this->db->insert('tbl_barang_masuk_tanpa_harga');
+
+		$id_barang=$serialize['id_barang'];
+		$this->db->query("UPDATE tbl_pembelian_barang SET status='Masuk' WHERE id_barang='$id_barang' AND status='Gudang'");
 	}
 
 
