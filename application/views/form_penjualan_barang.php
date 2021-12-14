@@ -709,7 +709,7 @@ function template_auto(abc)
 
         var jum_batas = "<input id='jum_per_koli' type='hidden' value='"+abc.jum_per_koli+"'>"+
                         "<input id='jum_per_lusin' type='hidden' value='"+abc.jum_per_lusin+"'>"+
-                        "<input id='id_barang' name='id_barang[]' type='hidden' value='"+abc.value+"'>";
+                        "<input id='id_barang' name='id_barang[]' type='hidden' value='"+abc.id+"'>";
 
         var template = "<tr>"+                
                 "<td>"+jum_batas+abc.id+"</td>"+
