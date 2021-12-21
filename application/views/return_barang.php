@@ -277,6 +277,8 @@ console.log("<?php echo $this->router->fetch_class();?>");
 var classnya = "<?php echo $this->router->fetch_class();?>";
 
 
+ $("html, body").animate({ scrollTop: 0 }, "slow");
+
 $("#form_return_by_grup_penjualan").on("submit",function(){
     var grup_penjualan = $("#grup_penjualan").val();
     $.get("<?php echo base_url()?>index.php/barang/cari_by_grup",{grup_penjualan:grup_penjualan},function(e){
