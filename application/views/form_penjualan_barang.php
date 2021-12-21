@@ -975,6 +975,9 @@ $("#penjualan_barang").on("submit",function(){
   }
   if(confirm("Anda yakin selesai?"))
   {
+
+    $("#simpan").hide();
+
     /****** hapus dlu pending *******/
     $.get("<?php echo base_url()?>index.php/barang/hapus_pending/<?php echo $group_penjualan?>",function(){});
     /****** hapus dlu pending *******/

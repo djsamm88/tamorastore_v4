@@ -14,7 +14,8 @@
     }
 
     for ($i=0; $i < $value['jumlah_barcode'] ; $i++) { 
-      echo "<img src='".base_url()."assets/barcode/barcode.php?codetype=Code128&size=40&text=$nama_barang&print=true'> &nbsp;&nbsp;&nbsp;&nbsp;";
+      echo "<img src='".base_url()."assets/barcode/barcode.php?codetype=Code128&size=40&text=$nama_barang&print=true'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+      
     }
     
     echo"<br><br>";

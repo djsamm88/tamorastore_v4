@@ -1,10 +1,55 @@
 
-<!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1 id="">
-        Form Return Barang        
-      </h1>      
-    </section>
+
+    <!-- Main content -->
+    <section class="content container-fluid" >
+
+      <div class="box box-warning">
+        <div class="box-header with-border">
+          <h3 class="box-title" id="">Form Return</h3>
+
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+                    title="Collapse">
+              <i class="fa fa-minus"></i></button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+              <i class="fa fa-times"></i></button>
+          </div>
+        </div>
+        <div class="box-body">
+              
+
+    <form id="form_return_by_grup_penjualan">
+      
+      <div class="row">    
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="grup_penjualan" name="grup_penjualan" required placeholder="Kode TRX">
+      </div>
+      <div class="col-sm-4">
+        <button class="btn btn-primary" type="submit">Cari Kode TRX</button>
+      </div>
+      </div>
+    </form>
+    <br>
+    <div id="info_cari"></div>
+
+    </div>
+    
+  </div>
+  <!-- /.box -->
+
+</section>
+<!-- /.content -->
+
+
+
+
+
+
+
+
+
+
+
 
     <!-- Main content -->
     <section class="content container-fluid" >
@@ -30,7 +75,7 @@
                   Nama Barang
                 </div>                
                 <div class="col-sm-8" id="t4_nama_barang">
-                  <input type="text"   class="form-control barang" placeholder="Barang" name="nama_barang" required>
+                  <input type="text"   class="form-control barang" placeholder="Barang" name="nama_barang" required id="nama_barang" readonly>
                   <input type="hidden"   class="form-control" name="id_barang" id="id_barang">
                 </div>
                 <div style="clear: both;"></div><br>
@@ -230,6 +275,47 @@
 <script>
 console.log("<?php echo $this->router->fetch_class();?>");
 var classnya = "<?php echo $this->router->fetch_class();?>";
+
+
+$("#form_return_by_grup_penjualan").on("submit",function(){
+    var grup_penjualan = $("#grup_penjualan").val();
+    $.get("<?php echo base_url()?>index.php/barang/cari_by_grup",{grup_penjualan:grup_penjualan},function(e){
+        console.log(e);
+        if(e.length<=0)
+        {
+          $("#info_cari").html("Transaksi <b>"+ grup_penjualan+"</b> tidak ditemukan.");
+        }else{
+          var tabel_data = "<select id='pilih_barang' class='form-control'>";
+              tabel_data +="<option value=''>--- Pilih Barang ---</option>";
+          $.each(e,function(a,b){
+              console.log(b.nama_barang);
+                tabel_data +="<option value='"+b.id_barang+"'>"+b.nama_barang+" | "+b.harga_jual+"</option>";
+          })
+              tabel_data += "</select>";
+
+          $("#info_cari").html(tabel_data);
+        }
+
+    })
+
+    return false;
+})
+
+
+
+$("#info_cari").on("change"," #pilih_barang",function(){
+  var id_barang = $(this).val();
+  var nama_barang = $('#info_cari option:selected').text();
+  console.log(id_barang);
+
+  var uang_kembali = nama_barang.split("|")[1];
+  
+  $("#id_barang").val(id_barang);
+  $("#nama_barang").val(nama_barang.split("|")[0]);
+  $("#uang_kembali").val(uang_kembali.trim());
+
+})
+
 
 
 <?php

@@ -30,6 +30,12 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 		return $q->result();
 	}
 
+	public function m_cari_by_grup($grup_penjualan)
+	{
+
+	}
+
+
 
 	public function history_tbl_pembelian_barang($id_cabang)
 	{
@@ -231,7 +237,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 	
 
 
-	public function m_data_gudang($id_gudang,$id_cabang)
+	public function m_data_gudang($id_gudang)
 	{
 		
 		

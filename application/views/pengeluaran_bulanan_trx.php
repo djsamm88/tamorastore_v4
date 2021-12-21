@@ -1,9 +1,10 @@
+<?php if($jenis_file=="html"){ ?>
 
 <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1 id="judul">
         Selamat datang di Sistem Informasi 
-        <small>UMROH</small>
+        <small>POS</small>
       </h1>      
     </section>
 
@@ -27,8 +28,11 @@
           </div>
         </div>
         <div class="box-body">
-              
-<table id="tbl_datanyax" class="table  table-striped table-bordered"  cellspacing="0" width="100%">
+<div class="table-responsive">   
+
+<?php } ?>
+
+<table id="tbl_datanyax" class="table  table-striped table-bordered"  cellspacing="0" width="100%" border="1">
       <thead>
         <tr>
               
@@ -68,6 +72,8 @@
       </tbody>
   </table>
 
+<?php if($jenis_file=="html"){ ?>
+<a href="<?php echo(base_url())?>index.php/pengeluaran_bulanan/pengeluaran_bulanan_trx_xl" target="blank" class="btn btn-primary">Excel</a>
 
         </div>
         
@@ -93,3 +99,5 @@ $(document).ready(function(){
 });
 $("#judul2").html("DataTable "+document.title);
 </script>
+
+<?php } ?>

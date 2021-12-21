@@ -1215,6 +1215,55 @@ class Barang extends CI_Controller {
 
 
 
+	public function lap_penjualan_batalkan()
+	{
+		$mulai = $this->input->get('mulai');
+		$selesai = $this->input->get('selesai');
+		$id_cabang = $this->input->get('id_cabang');
+
+		$id_admin 	= $this->session->userdata('id_admin');
+		$level 		= $this->session->userdata('level');
+
+		if($level=='1')
+		{
+			$id_admin="";
+		}
+
+		$data['mulai'] = $mulai;
+		$data['selesai'] = $selesai;
+		$data['id_cabang'] = $id_cabang;
+
+		$data['all'] = $this->m_barang->m_lap_penjualan($mulai,$selesai,$id_admin,$id_cabang);	
+		$this->load->view('lap_penjualan_batalkan',$data);
+	}
+
+
+	public function go_batalkan_trx()
+	{
+		$grup_penjualan = $this->input->post('grup_penjualan');
+
+		$this->db->query("INSERT INTO tbl_transaksi_batal SELECT * FROM tbl_transaksi WHERE id_referensi='$grup_penjualan'");
+		$this->db->query("INSERT INTO tbl_barang_transaksi_batal SELECT * FROM tbl_barang_transaksi WHERE grup_penjualan='$grup_penjualan'");
+
+		$this->db->query("DELETE FROM tbl_barang_transaksi WHERE grup_penjualan='$grup_penjualan'");
+		$this->db->query("DELETE FROM tbl_transaksi WHERE id_referensi='$grup_penjualan'");
+
+	}
+
+
+	public function cari_by_grup()
+	{
+		$grup_penjualan = $this->input->get("grup_penjualan");
+		//echo ($grup_penjualan);
+		header("Access-Control-Allow-Origin: *");
+		header("Access-Control-Allow-Headers: *");
+		header('Content-Type: application/json');	
+		echo json_encode($this->m_barang->m_detail_penjualan($grup_penjualan));		
+		
+
+	}
+
+
 	public function lap_penjualan_pelanggan()
 	{
 		$mulai = $this->input->get('mulai');
@@ -1405,7 +1454,7 @@ class Barang extends CI_Controller {
 		$id_gudang=$this->input->get('id_gudang');
 		$id_cabang=$this->input->get('id_cabang');
 
-		$data['stok'] = $this->m_barang->m_data_gudang($id_gudang,$id_cabang);	
+		$data['stok'] = $this->m_barang->m_data_gudang($id_gudang);	
 		$data['gudang'] = $this->m_gudang->m_data($id_cabang);
 
 		/****** array gudang yg kosong *****/
@@ -1433,6 +1482,7 @@ class Barang extends CI_Controller {
 		header("Content-Disposition: attachment; filename=$file");
 		header("Pragma: no-cache");
 		header("Expires: 0");	
+
 		$data['stok'] = $this->m_barang->m_data_gudang($id_gudang);	
 		$data['gudang'] = $this->m_gudang->m_data();
 

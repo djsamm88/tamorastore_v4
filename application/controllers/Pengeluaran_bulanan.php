@@ -49,9 +49,21 @@ class Pengeluaran_bulanan extends CI_Controller {
 	{
 			
 		$data['all'] = $this->m_pengeluaran_bulanan->m_trx_pengeluaran_bulanan();	
+		$data['jenis_file'] = "html";
 		$this->load->view('pengeluaran_bulanan_trx',$data);
 	}
 
+	public function pengeluaran_bulanan_trx_xl()
+	{
+		$file="pengeluaran_bulanan_trx_xl.xls";
+		header("Content-type: application/octet-stream");
+		header("Content-Disposition: attachment; filename=$file");
+		header("Pragma: no-cache");
+		header("Expires: 0");	
+		$data['all'] = $this->m_pengeluaran_bulanan->m_trx_pengeluaran_bulanan();	
+		$data['jenis_file'] = "xl";
+		$this->load->view('pengeluaran_bulanan_trx',$data);
+	}
 	public function form_pengeluaran_bulanan()
 	{
 		
