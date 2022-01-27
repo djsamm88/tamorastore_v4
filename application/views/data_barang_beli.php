@@ -227,12 +227,19 @@ function go_beli(ini)
                 };
       console.log(ser);
       
-      $.post("<?php echo base_url()?>index.php/"+classnya+"/go_beli",ser,function(x){
+      if(harga_beli==0)
+      {
+        alert("Ubah dulu harga beli,tidak bisa 0");
+      }else{
+        $.post("<?php echo base_url()?>index.php/"+classnya+"/go_beli",ser,function(x){
         console.log(x);
         eksekusi_controller('<?php echo base_url()?>index.php/'+classnya+'/data_beli',document.title);
         toastr["success"]("Harga telah diatur.", "Sukses");
         notif();
       })
+      }
+
+      
       
     }
 

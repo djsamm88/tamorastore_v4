@@ -6,7 +6,7 @@
         </li>
 
  
-
+ 
         <?php 
         if($this->session->userdata('level')=='1')
         {
@@ -229,6 +229,24 @@
           </li>
 
 
+           <li>
+            <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/lap_penjualan_per_barang/?id_pelanggan=6&mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Transaksi Penjualan');return false;">
+              <i class="fa fa-link"></i> <span>Lap.Per Barang</span>
+            </a>
+          </li>
+
+
+          
+             <li>
+              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/barang_transaksi/?mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Transaksi Barang');return false;">
+                <i class="fa fa-link"></i> <span>Lap.Transaksi</span>
+              </a>
+            </li>
+
+
+
+
+
         <li class="treeview">
           
           <a href="#"><i class="fa fa-users"></i> <span>Pelanggan</span>
@@ -437,19 +455,23 @@
             </li>
             
             <li>
-              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/stok_gudang/1','Stok Gudang');return false;">
+              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/stok_gudang/?id_gudang=1&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Stok Gudang');return false;">
                 <i class="fa fa-link"></i> <span>Stok Gudang <span class="label label-warning pull-right badge_gudang"></span></span></span>
               </a>
             </li>
-
             
             
 
+            
             <li>
-              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/log_pindah_gudang','Log Gudang');return false;">
+              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/log_pindah_gudang/?mulai=<?php echo date('Y-m-').'01'?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>','Log Gudang');return false;">
                 <i class="fa fa-link"></i> <span>Log Perpindahan </span>
               </a>
             </li>
+
+            
+
+
           </ul>
         </li>
         <?php 

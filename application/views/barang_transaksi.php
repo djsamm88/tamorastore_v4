@@ -72,7 +72,9 @@
               <th>No</th>                    
               <th>Tanggal</th>                     
               <th>Barang</th>                     
+              
               <th>Masuk</th>                     
+            
               <th>Keluar</th>                     
               
               
@@ -85,13 +87,18 @@
         {
           $no++;
             
+            $masuk = "";
+          if($this->session->userdata('id_admin')=='1') {
+                $masuk = $x->masuk;
+            } 
+
             echo (" 
               
               <tr>
                 <td>$no</td>                
                 <td>".tglindo($x->tanggal)."</td>
                 <td>$x->nama_barang</td>                
-                <td>$x->masuk</td>                
+                <td>$masuk</td>                
                 <td>$x->keluar</td>                                
               </tr>
           ");

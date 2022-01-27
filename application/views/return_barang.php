@@ -83,7 +83,7 @@
                   Jumlah
                 </div>                
                 <div class="col-sm-2" >
-                  <input type="number" name="jumlah" value="1" id="jumlah_barang" class="form-control" placeholder="jumlah barang">
+                  <input type="number" name="jumlah" value="1" id="jumlah_barang" class="form-control" placeholder="jumlah barang" autocomplete="off">
                 </div>
                 <div style="clear: both;"></div><br>
 
@@ -122,7 +122,7 @@
                 </div>
                 <div class="col-sm-8" >
                   <input type="hidden" id="uang_kembali_hide">
-                  <input type="text" name="uang_kembali" id="uang_kembali" class="form-control nomor" placeholder="Uang kembali">
+                  <input type="text" name="uang_kembali" id="uang_kembali" class="form-control nomor" placeholder="Uang kembali" readonly>
                 </div>
                 <div style="clear: both;"></div><br>
 
@@ -131,8 +131,8 @@
                   Nama Pelanggan
                 </div>                
                 <div class="col-sm-8" >
-                  <input  class="form-control id_pelanggan" required>
-                  <input type="hidden"   class="form-control" name="id_pelanggan" id="id_pelanggan">
+                  <input  class="form-control id_pelanggan" id="nama_pembeli" required>
+                  <input type="hidden"   class="form-control" name="id_pelanggan" id="id_pelanggan" readonly>
                   
                 </div>
                 <div style="clear: both;"></div><br>
@@ -277,7 +277,7 @@ console.log("<?php echo $this->router->fetch_class();?>");
 var classnya = "<?php echo $this->router->fetch_class();?>";
 
 
- $("html, body").animate({ scrollTop: 0 }, "slow");
+ $("html, body").animate({ scrollTop: 0 }, "slow"); 
 
 $("#form_return_by_grup_penjualan").on("submit",function(){
     var grup_penjualan = $("#grup_penjualan").val();
@@ -287,11 +287,16 @@ $("#form_return_by_grup_penjualan").on("submit",function(){
         {
           $("#info_cari").html("Transaksi <b>"+ grup_penjualan+"</b> tidak ditemukan.");
         }else{
+
+
           var tabel_data = "<select id='pilih_barang' class='form-control'>";
               tabel_data +="<option value=''>--- Pilih Barang ---</option>";
           $.each(e,function(a,b){
               console.log(b.nama_barang);
                 tabel_data +="<option value='"+b.id_barang+"'>"+b.nama_barang+" | "+b.harga_jual+"</option>";
+
+                $("#nama_pembeli").val(b.nama_pembeli);
+                $("#id_pelanggan").val(b.id_pelanggan);
           })
               tabel_data += "</select>";
 
@@ -303,6 +308,14 @@ $("#form_return_by_grup_penjualan").on("submit",function(){
     return false;
 })
 
+/*
+$("#jumlah_barang").on("keydown keyup mousedown mouseup select contextmenu drop",function(){
+      var harga = $("#uang_kembali").val();
+      var jum = $("#jumlah_barang").val();
+
+      $("#uang_kembali").val(harga*jum);
+})
+*/
 
 
 $("#info_cari").on("change"," #pilih_barang",function(){
@@ -315,6 +328,7 @@ $("#info_cari").on("change"," #pilih_barang",function(){
   $("#id_barang").val(id_barang);
   $("#nama_barang").val(nama_barang.split("|")[0]);
   $("#uang_kembali").val(uang_kembali.trim());
+  $("#uang_kembali_hide").val(uang_kembali.trim());
 
 })
 

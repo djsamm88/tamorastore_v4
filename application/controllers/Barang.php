@@ -977,23 +977,44 @@ class Barang extends CI_Controller {
 		/*********** insert ke transaksi **************/
 
 
-		$insert_baru['nama_barang'] = "RETURN_ ".$nama_barang;
-		$insert_baru['return'] 		= "1";
+		//cari dulu di db apakah sudah ada nama return_
+		$ret_nama_barang = "RETURN_ ".$nama_barang;
+		$x = $this->db->query("SELECT * FROM tbl_barang WHERE nama_barang='$ret_nama_barang'");
 
-		$this->db->set($insert_baru);
-		$this->db->insert('tbl_barang');
-		$id_baru = $this->db->insert_id();
+
+		if ($x->num_rows()>0){
+			//echo "Found!";
+			$y = $x->result();
+			$z = $y[0];
+			$insert_baru['nama_barang'] = $z->nama_barang;
+			$id_baru = $z->id;
+
+		}else{
+			$insert_baru['nama_barang'] = "RETURN_ ".$nama_barang;
+			$insert_baru['return'] 		= "1";
+
+			$this->db->set($insert_baru);
+			$this->db->insert('tbl_barang');
+			$id_baru = $this->db->insert_id();
+
+
+		}
+
+
+			//arahkan ke barang masuk setelah diinsert ke tbl barang
+			$bar_masuk['id_barang'] = $id_baru;
+			$bar_masuk['id_gudang'] = $data['id_gudang'];
+			$bar_masuk['qty'] 		= $data['jumlah'];
+			$bar_masuk['deskripsi'] = $ket;
+			$bar_masuk['id_cabang'] = $id_cabang;
+
+			$this->db->set($bar_masuk);
+			$this->db->insert('tbl_barang_masuk_tanpa_harga');
+			
 
 		
-		//arahkan ke barang masuk setelah diinsert ke tbl barang
-		$bar_masuk['id_barang'] = $id_baru;
-		$bar_masuk['id_gudang'] = $data['id_gudang'];
-		$bar_masuk['qty'] 		= $data['jumlah'];
-		$bar_masuk['deskripsi'] = $ket;
-		$bar_masuk['id_cabang'] = $id_cabang;
 
-		$this->db->set($bar_masuk);
-		$this->db->insert('tbl_barang_masuk_tanpa_harga');
+		
 
 		/********** jika kondisi=baik masuk ke barang ***************/
 		/*
@@ -1094,48 +1115,111 @@ class Barang extends CI_Controller {
 		
 		$data = $this->input->post();
 
-		$qty 		= $data['jumlah'];
-		$id_gudang	= $data['id_gudang'];		
-		$id_barang 	= $data['id_barang'];
-		$catatan	= $data['catatan'];
-
-
-		//tambah ke gudang baru
-		$this->db->query("INSERT INTO tbl_barang_transaksi 
-							SET 
-							jenis='masuk', 
-							jumlah='$qty',								
-							id_barang='$id_barang',
-							id_gudang='$id_gudang'
-							
-						");
-
-		//kurangi dari gudang lama
-		$id_gudang_lama	= $data['id_gudang_lama'];
-		$this->db->query("INSERT INTO tbl_barang_transaksi 
-							SET 
-							jenis='keluar', 
-							jumlah='$qty',								
-							id_barang='$id_barang',
-							id_gudang='$id_gudang_lama'
-							
-						");
-		
-		//catat log
+		$group_trx = date('ymdhis')."_".$this->session->userdata('id_admin');
+		$catatan		= $data['catatan'];
 		$id_admin = $this->session->userdata('id_admin');
-		$x = $this->db->query("INSERT INTO tbl_log_pemindahan_gudang 
-							SET 
-							id_gudang_lama='$id_gudang_lama', 
-							id_gudang_baru='$id_gudang',								
-							id_barang='$id_barang',
-							jumlah='$qty',
-							catatan='$catatan',
-							id_admin='$id_admin'
 
-						");
-		echo $this->db->insert_id();
+		for($i=0;$i<count($data['id_gudang_tujuan']);$i++)
+		{
+			if($data['id_gudang_tujuan'][$i] !="" && $data['jumlah_pindah'][$i] !="")
+			{
+				//var_dump($data);
+
+				
+				$qty 			= $data['jumlah_pindah'][$i];
+				$id_gudang_lama	= $data['id_gudang_lama'][$i];
+				$id_gudang		= $data['id_gudang_tujuan'][$i];
+				$id_barang 		= $data['id'][$i];
+				
+
+
+
+
+				//tambah ke gudang baru
+				$this->db->query("INSERT INTO tbl_barang_transaksi 
+									SET 
+									jenis='masuk', 
+									jumlah='$qty',								
+									id_barang='$id_barang',
+									id_gudang='$id_gudang'
+									
+								");
+
+
+
+				$this->db->query("INSERT INTO tbl_barang_transaksi 
+									SET 
+									jenis='keluar', 
+									jumlah='$qty',								
+									id_barang='$id_barang',
+									id_gudang='$id_gudang_lama'
+									
+								");
+				
+
+				//catat log
+				
+				$x = $this->db->query("INSERT INTO tbl_log_pemindahan_gudang 
+									SET 
+									id_gudang_lama='$id_gudang_lama', 
+									id_gudang_baru='$id_gudang',								
+									id_barang='$id_barang',
+									jumlah='$qty',
+									catatan='$catatan',
+									group_trx='$group_trx',
+									id_admin='$id_admin'
+
+								");
+				//echo $this->db->insert_id();
+
+				
+
+			}
+		}
+
+		echo $group_trx;
 
 			
+	}
+
+
+	public function print_log_gudang_by_group($group_trx)
+	{
+		$data['all'] = $this->m_barang->log_gudang_by_group($group_trx);
+
+
+
+		//var_dump($staff_arr);
+		$filename = "slip_pindah_gudang_".$this->router->fetch_class()."_".date('d_m_y_h_i_s');
+		
+		// As PDF creation takes a bit of memory, we're saving the created file in /downloads/reports/
+		$pdfFilePath = FCPATH."/downloads/$filename.pdf";
+		
+		 //$html = $this->load->view('slip_pembayaran.php',$data);
+    
+    	//echo json_encode($data);
+    	//$this->load->view('template/part/laporan_pdf.php',$data);
+    	
+    	
+		if (file_exists($pdfFilePath) == FALSE)
+		{
+			//ini_set('memory_limit','512M'); // boost the memory limit if it's low <img class="emoji" draggable="false" alt="" src="https://s.w.org/images/core/emoji/72x72/1f609.png">
+        	ini_set('memory_limit', '2048M');
+			//$html = $this->load->view('laporan_mpdf/pdf_report', $data, true); // render the view into HTML
+			$html = $this->load->view('struk_log_pindah_gudang.php',$data,true);
+			
+			$this->load->library('pdf_potrait'); 
+			$pdf = $this->pdf_potrait->load();
+			//$this->load->library('pdf');
+			//$pdf = $this->pdf->load();
+
+			$pdf->SetFooter($_SERVER['HTTP_HOST'].'|{PAGENO}|'.date("YmdHis")."_".$this->session->userdata('id_admin')); // Add a footer for good measure <img class="emoji" draggable="false" alt="" src="https://s.w.org/images/core/emoji/72x72/1f609.png">
+			$pdf->WriteHTML($html); // write the HTML into the PDF
+			$pdf->Output($pdfFilePath, 'F'); // save to file because we can
+		}
+		 
+		redirect(base_url()."downloads/$filename.pdf","refresh");
+		
 	}
 
 	public function lap_barang()
@@ -1284,6 +1368,60 @@ class Barang extends CI_Controller {
 
 		$data['all'] = $this->m_barang->m_lap_penjualan_pelanggan($id_pelanggan,$mulai,$selesai,$id_cabang);	
 		$this->load->view('lap_penjualan_pelanggan',$data);
+	}
+
+
+	public function lap_penjualan_per_barang()
+	{
+		$mulai = $this->input->get('mulai');
+		$selesai = $this->input->get('selesai');
+		$id_cabang = $this->input->get('id_cabang');
+		$id_barang = $this->input->get('id_barang');
+
+		$id_admin 	= $this->session->userdata('id_admin');
+		$level 		= $this->session->userdata('level');
+
+
+		$data['mulai'] = $mulai;
+		$data['selesai'] = $selesai;
+		$data['id_cabang'] = $id_cabang;
+		$data['id_barang'] = $id_barang;
+
+		$data['barang'] = $this->m_barang->m_data();
+
+		$data['all'] = $this->m_barang->m_lap_penjualan_per_barang($id_barang,$mulai,$selesai,$id_cabang);	
+		$this->load->view('lap_penjualan_per_barang',$data);	
+	}
+
+
+
+	public function lap_penjualan_per_barang_xl()
+	{
+		$mulai = $this->input->get('mulai');
+		$selesai = $this->input->get('selesai');
+		$id_cabang = $this->input->get('id_cabang');
+		$id_barang = $this->input->get('id_barang');
+
+		$file = "laporan_penjualan_perbarang-$mulai-$selesai.xls";
+		header("Content-type: application/octet-stream");
+		header("Content-Disposition: attachment; filename=$file");
+		header("Pragma: no-cache");
+		header("Expires: 0");	
+
+
+		$id_admin 	= $this->session->userdata('id_admin');
+		$level 		= $this->session->userdata('level');
+
+
+		$data['mulai'] = $mulai;
+		$data['selesai'] = $selesai;
+		$data['id_cabang'] = $id_cabang;
+		$data['id_barang'] = $id_barang;
+
+		$data['barang'] = $this->m_barang->m_data();
+
+		$data['all'] = $this->m_barang->m_lap_penjualan_per_barang($id_barang,$mulai,$selesai,$id_cabang);	
+		$this->load->view('lap_penjualan_per_barang_xl',$data);	
 	}
 
 
@@ -1446,7 +1584,6 @@ class Barang extends CI_Controller {
 
 
 	}
-
 
 
 	public function stok_gudang()

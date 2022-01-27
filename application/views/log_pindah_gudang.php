@@ -31,10 +31,10 @@
 <div class="alert alert-info">
           <form id="form_log">
               <div class="col-sm-5">
-                  <input type="text" class="form-control datepicker" name="mulai" id="mulai"  value="<?php echo $mulai ?>" >
+                  <input type="text" class="form-control datepicker" name="mulai" id="mulai"  value="<?php echo $mulai ?>" autocomplete="off" >
               </div>
               <div class="col-sm-5">
-                <input type="text" class="form-control datepicker" name="selesai" id="selesai"  value="<?php echo $selesai ?>">
+                <input type="text" class="form-control datepicker" name="selesai" id="selesai"  value="<?php echo $selesai ?>" autocomplete="off">
               </div>
               <div class="col-sm-2">
                 <input type="submit" class="btn btn-primary btn-block" value="Go">
@@ -69,7 +69,7 @@
 
           $no++;
 
-          $btn = "<a href='".base_url()."index.php/barang/struk_log_pindah_gudang/$x->id' target='_blank'>Cetak</a>";
+          $btn = "<a href='".base_url()."index.php/barang/print_log_gudang_by_group/$x->group_trx' target='_blank'>Cetak</a>";
 
             echo (" 
               

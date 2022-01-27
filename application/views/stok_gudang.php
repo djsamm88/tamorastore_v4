@@ -8,7 +8,7 @@
 
     <!-- Main content -->
     <section class="content container-fluid" >
-
+ 
       <!--------------------------
         | Your Page Content Here |
         -------------------------->    
@@ -80,6 +80,7 @@
 <hr>
   <b>Data Stok</b>
   <div class="table-responsive">
+  <form id="pindah_banyak">
   <table id="tbl_stok" class="table  table-striped table-bordered"  cellspacing="0" width="100%">
       <thead>
         <tr>
@@ -90,7 +91,8 @@
                 <th>Stok Barang</th>                
                 <th>Data Reminder</th>                
                 <th>Gudang</th>                
-                <th>Action</th>                
+                <th>Pindah ke</th>                
+                <th>Jumlah</th>                
               
               
         </tr>
@@ -105,6 +107,24 @@
           $pindah = $s->qty>0?"<button class='btn btn-primary btn-xs' onclick='pindahkan($s->id,$s->id_gudang)'>Pindahkan</button>":"";
 
 
+          $all_gud = "";
+          $jum_pindah="";
+
+          
+
+
+            $all_gud .='<select class="form-control" name="id_gudang_tujuan[]" id="id_gudang_tujuan">
+                        <option value="">--- Pilih Gudang tujuan ---</option>';
+            foreach ($this->m_gudang->m_data() as $gud) {
+                      $all_gud .="<option value='$gud->id_gudang'>$gud->kode_cabang - $gud->nama_cabang | $gud->nama_gudang </option>";
+                    }
+
+            $all_gud .='</select>';
+
+
+            $jum_pindah = '<input class="form-control nomor" name="jumlah_pindah[]" id="jumlah" >';
+
+
 
           $no++;
 
@@ -112,12 +132,16 @@
               
               <tr class='$class'>
                 <td>$no</td>
-                <td>$s->id</td>
+                <td width='5px'>$s->id<input name='id[]' value='$s->id' type='hidden'> </td>
                 <td>$s->nama_barang</td>
                 <td>$s->qty</td>
                 <td>$s->reminder</td>
-                <td>$s->nama_gudang</td>
-                <td>$pindah</td>
+                <td>$s->nama_gudang<input name='id_gudang_lama[]' value='$s->id_gudang' type='hidden'></td>
+                <!--<td>$pindah</td>-->
+
+                <td>$all_gud</td>
+                <td>$jum_pindah</td>
+
                 
               </tr>
           ");
@@ -128,6 +152,17 @@
         ?>
       </tbody>
   </table>
+
+            <div class="col-sm-3 ">catatan</div>
+            <div class="col-sm-9">              
+              <textarea class="form-control" name="catatan" id="catatan" required></textarea>              
+            </div>
+            <div style="clear:both"></div>
+            <br>
+
+            
+    <button type="submit" class="btn btn-primary"> Pindahkan </button>
+</form>
 </div>
 
 
@@ -227,9 +262,28 @@
 <script>
 $(document).ready(function(){
 
-  $('#tbl_stok').dataTable();
+  $('#tbl_stok').dataTable({"pageLength": 100});
+
 
 });
+
+
+$("#pindah_banyak").on("submit",function(){
+  var ser=$(this).serialize();
+    if(confirm("Anda yakin?"))
+    {
+      $.post("<?php echo base_url()?>index.php/barang/pindah_gudang",ser,function(x){
+        console.log(x);
+        //eksekusi_controller('<?php echo base_url()?>index.php/barang/stok_gudang/?id_gudang=1&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Stok Gudang');return false;
+
+        window.open("<?php echo base_url()?>index.php/barang/print_log_gudang_by_group/"+x);
+      })
+        
+    }
+    
+  return false;
+})
+
 
 function pindahkan(id_barang,id_gudang)
 {

@@ -29,6 +29,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="<?php echo base_url()?>assets/datetimepicker/datetimepicker.css">
   <link rel="stylesheet" href="<?php echo base_url()?>assets/toastr/toastr.min.css">
 
+
+ <!-- Select2 -->
+  <link rel="stylesheet" href="<?php echo base_url()?>plugins/select2/dist/css/select2.min.css">
+  
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -334,6 +338,11 @@ desired effect
 <script type="text/javascript" src="<?php echo base_url()?>assets/datetimepicker/datetimepicker.pt-BR.js"></script>
 
 
+<!-- Select2 -->
+<script src="<?php echo base_url()?>plugins/select2/dist/js/select2.full.min.js"></script>
+
+
+
 <script type="text/javascript" src="<?php echo base_url()?>assets/toastr/toastr.min.js"></script>
 
 <script src="https://cdn.firebase.com/js/client/2.2.3/firebase.js"></script>
@@ -345,6 +354,7 @@ desired effect
   // To make Pace works on Ajax calls
   $(document).ajaxStart(function () {
     Pace.restart();
+        $('.select2').select2();
 
   })
   

@@ -9,6 +9,69 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 			$this->load->helper('custom_func');
 		}
 
+
+
+
+	public function m_lap_penjualan_per_barang($id_barang,$mulai,$selesai,$id_cabang='')
+	{	
+		$where="";
+		
+		
+
+		$q = $this->db->query("
+				SELECT 
+				a.grup_penjualan,
+				SUM(a.sub_total_jual) AS total, 
+				a.diskon,
+				a.saldo,				
+				a.nama_pembeli,
+				a.hp_pembeli,
+				a.nama_packing,
+				a.tgl_transaksi,
+				a.tgl_trx_manual,
+				a.harga_ekspedisi,
+				a.transport_ke_ekspedisi,
+				a.id_pelanggan,
+				b.nama_admin,
+				b.email_admin 
+			FROM tbl_barang_transaksi a
+			LEFT JOIN tbl_admin b ON a.id_admin=b.id_admin
+			WHERE a.jenis='keluar' AND (a.harga_beli <> 0 AND a.harga_jual <> 0) $where 
+				AND a.tgl_transaksi BETWEEN '$mulai' AND '$selesai' AND a.id_cabang='$id_cabang' AND a.id_barang='$id_barang'
+			GROUP BY grup_penjualan
+			ORDER BY tgl_transaksi DESC
+			");
+
+		return $q->result();
+	}
+
+
+	public function log_gudang_by_group($group_trx)
+	{
+		$q = "
+		SELECT a.group_trx,a.id,a.tgl,a.jumlah,a.catatan,
+								   b.nama_gudang AS nama_gudang_lama,
+								   c.nama_gudang AS nama_gudang_baru,
+								   CONCAT(d.id,'#',d.nama_barang) AS nama_barang,
+								   e.nama_admin,
+								   f.nama_cabang AS cabang_lama,
+								   f.kode_cabang AS kode_cabang_lama,
+								   g.nama_cabang AS cabang_baru,
+								   g.kode_cabang AS kode_cabang_baru
+								FROM tbl_log_pemindahan_gudang a
+								LEFT JOIN tbl_gudang b ON a.id_gudang_lama=b.id_gudang
+								LEFT JOIN tbl_gudang c ON a.id_gudang_baru=c.id_gudang
+								LEFT JOIN tbl_barang d ON a.id_barang=d.id 
+								LEFT JOIN tbl_admin e ON a.id_admin=e.id_admin
+								LEFT JOIN tbl_cabang f ON b.id_cabang=f.id_cabang
+								LEFT JOIN tbl_cabang g ON c.id_cabang=g.id_cabang 
+						WHERE a.group_trx='$group_trx'";
+
+		$qq = $this->db->query($q);
+		return $qq->result();
+
+	}
+
 	public function nama_barang($id)
 	{
 		$q = $this->db->query("SELECT nama_barang FROM tbl_barang WHERE id='$id'");
@@ -311,7 +374,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 								)b
 								ON a.id =b.id_barang	
 								LEFT JOIN tbl_gudang c ON b.id_gudang=c.id_gudang
-								WHERE b.id_gudang='$id_gudang' AND (a.nama_barang LIKE '%$cari%' OR a.id LIKE '%$cari%') AND qty>0
+								WHERE  (a.nama_barang LIKE '%$cari%' OR a.id LIKE '%$cari%') AND qty>0
 								ORDER BY b.qty ASC
 					");
 		return $q;
@@ -585,6 +648,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 					b.*,
 					c.nama_admin,
 					d.saldo
+
 				FROM tbl_barang_transaksi a 
 				LEFT JOIN tbl_barang b 
 				ON a.id_barang=b.id 
@@ -876,7 +940,7 @@ public function m_pesanan_member($id_pelanggan='')
 	public function m_log_pindah_gudang($mulai,$selesai)
 	{
 		$q = $this->db->query("
-							SELECT a.id,a.tgl,a.jumlah,a.catatan,
+							SELECT a.group_trx,a.id,a.tgl,a.jumlah,a.catatan,
 								   b.nama_gudang AS nama_gudang_lama,
 								   c.nama_gudang AS nama_gudang_baru,
 								   CONCAT(d.id,'#',d.nama_barang) AS nama_barang,
