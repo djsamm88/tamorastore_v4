@@ -398,7 +398,6 @@
 
 
 
-
         <li>
           <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/form_penjualan',' Kasir');return false;">
             <i class="fa fa-shopping-cart"></i> <span>Kasir</span>

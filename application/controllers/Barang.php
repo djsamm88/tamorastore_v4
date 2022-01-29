@@ -1741,6 +1741,8 @@ class Barang extends CI_Controller {
 		$serialize['harga_koli'] = hanya_nomor($serialize['harga_koli']);
 		$serialize['jum_per_koli'] = hanya_nomor($serialize['jum_per_koli']);
 		$serialize['harga_pokok'] = hanya_nomor($serialize['harga_pokok']);
+		$serialize['harga_partai'] = hanya_nomor($serialize['harga_partai']);
+		$serialize['jum_partai'] = hanya_nomor($serialize['jum_partai']);
 
 		if($id=='')
 		{

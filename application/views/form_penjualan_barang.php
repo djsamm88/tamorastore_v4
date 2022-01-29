@@ -19,12 +19,14 @@ if(isset($group_penjualan))
     $sel_retail = $pend->satuan_jual=='retail'?'selected':'';
     $sel_lusin = $pend->satuan_jual=='lusin'?'selected':'';
     $sel_koli = $pend->satuan_jual=='koli'?'selected':'';
+    $sel_partai = $pend->satuan_jual=='partai'?'selected':'';
 
     $stok = $this->m_barang->m_stok_by_id_barang(1,$pend->id)->result()[0]->qty;
 
     $pilihan = "<option value='retail' $sel_retail>Retail</option>
                 <option value='lusin'  $sel_lusin>Lusin</option>
                 <option value='koli' $sel_koli>Koli</option>
+                <option value='partai' $sel_partai>Partai</option>
                 ";
 
     $class = $pend->qty_jual>$stok?"class='danger'":"";
@@ -33,6 +35,7 @@ if(isset($group_penjualan))
                     <td>
                       <input id='jum_per_koli' type='hidden' value='$pend->jum_per_koli'>
                       <input id='jum_per_lusin' type='hidden' value='$pend->jum_per_lusin'>
+                      <input id='jum_partai' type='hidden' value='$pend->jum_partai'>
                       <input id='id_barang' name='id_barang[]' type='hidden' value='$pend->id'>
                       $pend->id
                     </td>
@@ -40,7 +43,7 @@ if(isset($group_penjualan))
                     <td id='nama_barang'>$pend->nama_barang</td>
                     <td id='t4_berat'>$pend->berat</td>
                     <td>
-                      <select name='satuan_jual[]' class='form-control' id='pilihSatuan' onchange='gantiHarga($pend->harga_retail,$pend->harga_lusin,$pend->harga_koli,$pend->jum_per_koli,$pend->jum_per_lusin,$(this))'>
+                      <select name='satuan_jual[]' class='form-control' id='pilihSatuan' onchange='gantiHarga($pend->harga_retail,$pend->harga_lusin,$pend->harga_koli,$pend->harga_partai,$pend->jum_per_koli,$pend->jum_per_lusin,$pend->jum_partai,$(this))'>
                         $pilihan
                       </select>
                     </td>
@@ -598,8 +601,10 @@ $( function() {
                         harga_retail: obj.harga_retail, 
                         harga_lusin: obj.harga_lusin, 
                         harga_koli: obj.harga_koli, 
+                        harga_partai: obj.harga_partai, 
                         jum_per_koli: obj.jum_per_koli, 
                         jum_per_lusin: obj.jum_per_lusin, 
+                        jum_partai: obj.jum_partai, 
                         reminder: obj.reminder, 
                         berat:obj.berat,
                         nama_barang:obj.nama_barang +" - "+obj.id,
@@ -678,24 +683,33 @@ function template_auto(abc)
 
       var option =   "<option value='retail'>Retail</option>"+
                       "<option value='lusin'>Lusin</option>"+
+                      "<option value='partai'>Partai</option>"+
                       "<option value='koli'>Koli</option>";
 
       var stok          = parseInt(abc.stok);
       var jum_per_lusin = parseInt(abc.jum_per_lusin);
       var jum_per_koli  = parseInt(abc.jum_per_koli);
+      var jum_partai  = parseInt(abc.jum_partai);
       
-
       if(stok<jum_per_lusin){
-        var option =   "<option value='retail'>Retail</option>"+                        
+        var option =   "<option value='retail'>Retail</option>"+ 
+                        "<option value='partai'>Partai</option>"+
                         "<option value='koli'>Koli</option>";        
       }
 
       if(stok<jum_per_koli){
         var option =   "<option value='retail'>Retail</option>"+                        
+                        "<option value='partai'>Partai</option>"+
+                        "<option value='lusin'>Lusin</option>";
+      }
+      
+      if(stok<jum_partai){
+        var option =   "<option value='retail'>Retail</option>"+
+                        "<option value='koli'>Koli</option>"+
                         "<option value='lusin'>Lusin</option>";
       }
 
-      if(stok<jum_per_koli && stok<jum_per_lusin ){
+      if(stok<jum_per_koli && stok<jum_per_lusin && stok<jum_partai){
         var option =   "<option value='retail'>Retail</option>";
       }
 
@@ -703,13 +717,15 @@ function template_auto(abc)
 
        
                   
-       var pilih_satuan = "<select name='satuan_jual[]' class='form-control' id='pilihSatuan' onchange='gantiHarga("+abc.harga_retail+","+abc.harga_lusin+","+abc.harga_koli+","+abc.jum_per_koli+","+abc.jum_per_lusin+",$(this))'>"+
+       var pilih_satuan = "<select name='satuan_jual[]' class='form-control' id='pilihSatuan' onchange='gantiHarga("+abc.harga_retail+","+abc.harga_lusin+","+abc.harga_koli+","+abc.jum_per_koli+","+abc.jum_per_lusin+","+abc.harga_partai+","+abc.jum_partai+",$(this))'>"+
                           option+
                          "</select>";
 
         var jum_batas = "<input id='jum_per_koli' type='hidden' value='"+abc.jum_per_koli+"'>"+
                         "<input id='jum_per_lusin' type='hidden' value='"+abc.jum_per_lusin+"'>"+
-                        "<input id='id_barang' name='id_barang[]' type='hidden' value='"+abc.id+"'>";
+                        "<input id='jum_partai' type='hidden' value='"+abc.jum_partai+"'>"+
+                        "<input id='id_barang' name='id_barang[]' type='hidden' value='"+abc.value+"'>";
+
 
         var template = "<tr>"+                
                 "<td>"+jum_batas+abc.id+"</td>"+
@@ -737,7 +753,8 @@ function template_auto(abc)
 
 }
 
-function gantiHarga(a,b,c,d,e,ini)
+
+function gantiHarga(a,b,c,d,e,f,g,ini)
 {
 
   var t4_harga = ini.parent().parent().find("#t4_harga");
@@ -768,13 +785,19 @@ function gantiHarga(a,b,c,d,e,ini)
   {
     ret = c;
     jumlah_beli.val(d);
-  }  
+  }
+  
+  
+  if(ini.val()=="partai")
+  {
+    ret = f;
+    jumlah_beli.val(g);
+  }
 
 
   t4_harga.val(formatRupiah(ret));
 
   sub_total(jumlah_beli);
-  sub_total_berat(jumlah_beli);
   
 }
 
@@ -793,6 +816,7 @@ $("#tbl_datanya").on("keydown keyup mousedown mouseup select contextmenu drop","
   var stoknya       = parseInt($(this).parent().parent().find("#stoknya").html());
   var jum_per_koli  = parseInt($(this).parent().parent().find("#jum_per_koli").val());
   var jum_per_lusin = parseInt($(this).parent().parent().find("#jum_per_lusin").val());
+  var jum_partai    = parseInt($(this).parent().parent().find("#jum_partai").val());
 
   var pilihSatuan   = $(this).parent().parent().find("#pilihSatuan").val();
 
@@ -817,11 +841,18 @@ $("#tbl_datanya").on("keydown keyup mousedown mouseup select contextmenu drop","
     $(this).attr('min',jum_per_lusin);
     //$(this).val(jum_per_lusin);
   }
+  
+  if(pilihSatuan=='partai' && dibeli<jum_partai){
+    console.log("jum_partai"+jum_partai);
+    //alert("Minimal beli Lusin barang ini = "+jum_per_lusin);
+    $(this).attr('min',jum_partai);
+    //$(this).val(jum_per_lusin);
+  }
 
   sub_total($(this));  
-  sub_total_berat($(this));
   
 
+  sub_total_berat($(this));  
 
 })
 

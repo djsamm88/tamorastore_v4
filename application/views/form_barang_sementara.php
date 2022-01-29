@@ -67,6 +67,10 @@
           {
             $jum = $x->jumlah*1;
           }
+          if($x->satuan == 'partai')
+          {
+            $jum = $x->jumlah*$x->jum_partai;
+          }
 
             echo (" 
               
@@ -77,7 +81,7 @@
                 <td id='qty_awal'>$x->jumlah - $x->satuan <br>($jum pcs)</td>    
                          
                 <td class='warning'>
-                  <input class='form-control' name='qty' type='number' id='qty'>                  
+                  <input class='form-control' name='qty' type='number' id='qty' value='$jum' readonly>                  
                 </td>
                 <td class='warning'>
                   <select class='form-control' name='id_gudang' required id='id_gudang'>

@@ -15,7 +15,6 @@ $total_berat=0;
 
     <!-- Main content -->
     <section class="content container-fluid" >
-
       <!--------------------------
         | Your Page Content Here |
         -------------------------->    
@@ -148,8 +147,10 @@ $( function() {
                         harga_retail: obj.harga_retail, 
                         harga_lusin: obj.harga_lusin, 
                         harga_koli: obj.harga_koli, 
+                        harga_partai: obj.harga_partai, 
                         jum_per_koli: obj.jum_per_koli, 
                         jum_per_lusin: obj.jum_per_lusin, 
+                        jum_partai: obj.jum_partai, 
                         reminder: obj.reminder, 
                         berat:obj.berat,
                         harga_pokok:obj.harga_pokok
@@ -188,6 +189,7 @@ $( function() {
                 "<td id='nama_barang'>"+ui.item.label+"</td>"+                
                 "<td><select class='form-control' name='satuan[]'><option value='koli'>Koli</option>"+
                       "<option value='lusin'>Lusin</option>"+
+                      "<option value='partai'>Partai</option>"+
                       "<option value='retail'>Retail</option></select></td>"+
                 
                 "<td>"+

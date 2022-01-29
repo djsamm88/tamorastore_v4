@@ -44,9 +44,11 @@
               <th>Harga Beli</th>                     
               <th>Harga Retail</th>                     
               <th>Harga Lusin</th>                     
-              <th>Harga Koli</th>                     
+              <th>Harga Koli</th>     
+              <th>Harga Partai</th>                
               <th>Jumlah / Lusin</th>                     
-              <th>Jumlah / Koli</th>                     
+              <th>Jumlah / Koli</th>      
+              <th>Jumlah / Partai</th>               
               <th>Reminder Gudang</th>                     
               <th>Berat (Gram)</th>                     
               <th>Gambar</th>                     
@@ -85,8 +87,10 @@
                 <td>".rupiah($x->harga_retail)."</td>                
                 <td>".rupiah($x->harga_lusin)."</td>                
                 <td>".rupiah($x->harga_koli)."</td>                
+                <td>".rupiah($x->harga_partai)."</td>                
                 <td>".rupiah($x->jum_per_lusin)."</td>     
                 <td>".rupiah($x->jum_per_koli)."</td>     
+                <td>".rupiah($x->jum_partai)."</td>     
                 <td>$x->reminder</td>                           
                 <td>$x->berat</td>                           
                 <td><a target='blank' href='".base_url()."uploads/$x->gambar'>$x->gambar</a></td>                           
@@ -156,6 +160,9 @@
         <div class="col-sm-4">Harga Koli</div>
             <div class="col-sm-8"><input type="text" name="harga_koli" id="harga_koli" required="required" class="form-control nomor" placeholder="harga_koli"></div>
             <div style="clear: both;"></div><br>
+        <div class="col-sm-4">Harga Partai</div>
+            <div class="col-sm-8"><input type="text" name="harga_partai" id="harga_partai" required="required" class="form-control nomor" placeholder="harga_partai"></div>
+            <div style="clear: both;"></div><br>
 
 
 
@@ -167,6 +174,11 @@
 
         <div class="col-sm-4">Jumlah/Koli</div>
             <div class="col-sm-8"><input type="text" name="jum_per_koli" id="jum_per_koli" required="required" class="form-control nomor" placeholder="jum_per_koli" ></div>
+            <div style="clear: both;"></div><br>
+        
+
+        <div class="col-sm-4">Jumlah/Partai</div>
+            <div class="col-sm-8"><input type="text" name="jum_partai" id="jum_partai" required="required" class="form-control nomor" placeholder="jum_partai" ></div>
             <div style="clear: both;"></div><br>
         
 
@@ -221,8 +233,10 @@ function edit(id)
     $("#harga_retail").val(e[0].harga_retail);
     $("#harga_lusin").val(e[0].harga_lusin);
     $("#harga_koli").val(e[0].harga_koli);
+    $("#harga_partai").val(e[0].harga_partai);
     $("#jum_per_koli").val(e[0].jum_per_koli);
     $("#jum_per_lusin").val(e[0].jum_per_lusin);
+    $("#jum_partai").val(e[0].jum_partai);
 
     $("#harga_pokok").val(e[0].harga_pokok);
     $("#reminder").val(e[0].reminder);
