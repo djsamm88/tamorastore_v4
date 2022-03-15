@@ -316,7 +316,7 @@ class Barang extends CI_Controller {
 				- Jumlah:[".rupiah($total_tanpa_diskon)."] <br>
 				- Saldo :".rupiah(hanya_nomor($data['saldo']))."<br>
 				- Bayar :".rupiah(hanya_nomor($data['bayar']))."<br>
-				
+
 				".$data['keterangan'];
 
 		$ser_trx = array(
@@ -354,8 +354,7 @@ class Barang extends CI_Controller {
 		
 
 		//selisih 
-		if(hanya_nomor($data['selisih'])!=0)
-		{
+		
 			if($data['selisih']<0)
 			{
 				$ser_saldo['id_group']='17';	
@@ -381,7 +380,7 @@ class Barang extends CI_Controller {
 
 			$this->db->set($ser_saldo);
 			$this->db->insert('tbl_transaksi');
-		}
+
 
 
 		//piutang
