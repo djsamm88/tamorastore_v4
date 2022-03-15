@@ -258,7 +258,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 										SELECT a.*,(a.tgl_update) AS tanggal,b.nama,b.jenis FROM `tbl_transaksi` a 
 										INNER JOIN tbl_group_transaksi b 
 										ON a.id_group=b.id
-										WHERE a.id_cabang='$id_cabang'
+										/*WHERE a.id_cabang='$id_cabang'*/
 										)a
 										WHERE (a.jumlah*1)<>0
 									)a 

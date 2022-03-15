@@ -202,7 +202,7 @@ class Pelanggan extends CI_Controller {
 		$data['all'] = $this->m_pelanggan->m_data();			
 		$this->load->view('transaksi_pelanggan.php',$data);
 	}
-
+ 
 	public function jadikan_member($id_pelanggan)
 	{
 		$this->db->query("UPDATE tbl_pelanggan SET status='member' WHERE id_pelanggan='$id_pelanggan'");
@@ -221,27 +221,63 @@ class Pelanggan extends CI_Controller {
 	{
 		$serialize = $this->input->post();
 		$serialize['url_bukti'] = upload_file('url_bukti');
+		$id_pelanggan = $serialize['id_pelanggan'];
 
 		//var_dump($serialize);
-		$serialize['jumlah'] = hanya_nomor($serialize['jumlah']);
-		$serialize['keterangan'] = $serialize['keterangan']." - A.n : ".$serialize['nama_pembeli']." - ID :".$serialize['id_pelanggan'];
+		$xx = $this->db->query("SELECT saldo FROM tbl_pelanggan WHERE id_pelanggan='$id_pelanggan'");
+		$xxx = $xx->result()[0];
 
-		unset($serialize['nama_pembeli']);
-		$this->m_pelanggan->insert_trx($serialize);
+		
+		$jumlah = hanya_nomor($serialize['jumlah']);
+		
 
-		$jumlah = $serialize['jumlah'];
-		$id_pelanggan = $serialize['id_pelanggan'];
+		$saldo_akhir = hanya_nomor($xxx->saldo);
+		
+
+
 		if($serialize['id_group']=='17')
 		{
+			$saldo_fix = $saldo_akhir-$jumlah;
 			//tambah utang
-			$this->db->query("UPDATE tbl_pelanggan SET saldo=saldo-$jumlah WHERE id_pelanggan='$id_pelanggan'");
+			$this->db->query("UPDATE tbl_pelanggan SET saldo=($saldo_fix) WHERE id_pelanggan='$id_pelanggan'");
 		}
 
 		if($serialize['id_group']=='18')
 		{
 			//bayar utang
-			$this->db->query("UPDATE tbl_pelanggan SET saldo=saldo+$jumlah WHERE id_pelanggan='$id_pelanggan'");
+			$saldo_fix = $saldo_akhir+$jumlah;
+			$this->db->query("UPDATE tbl_pelanggan SET saldo=($saldo_fix) WHERE id_pelanggan='$id_pelanggan'");
 		}
+
+
+
+		$serialize['jumlah'] 		= hanya_nomor($serialize['jumlah']);
+		$serialize['keterangan'] 	= $serialize['keterangan']." - A.n : ".$serialize['nama_pembeli']." - ID :".
+									  $serialize['id_pelanggan']."<br>
+									  Saldo awal = ".rupiah($saldo_akhir)."<br>
+									  Transaksi  = ".rupiah(hanya_nomor($serialize['jumlah']))."<br>
+										";
+
+		unset($serialize['nama_pembeli']);
+		$serialize['id_cabang'] = $this->session->userdata('id_cabang');
+		$this->m_pelanggan->insert_trx($serialize);
+
+
+
+		///saldo akhir
+		/*
+		$serialize['jumlah'] 		= hanya_nomor($serialize['jumlah']);
+		$serialize['keterangan'] 	= $serialize['keterangan']." - A.n : ".$serialize['nama_pembeli']." - ID :".
+									  $serialize['id_pelanggan']."<br>
+									  Saldo awal = ".rupiah($saldo_akhir)."<br>
+									  Transaksi  = ".rupiah(hanya_nomor($serialize['jumlah']))."<br>
+										";
+
+		unset($serialize['nama_pembeli']);
+		$serialize['id_cabang'] = $this->session->userdata('id_cabang');
+		$this->m_pelanggan->insert_trx($serialize);
+		*/
+
 
 	}
 

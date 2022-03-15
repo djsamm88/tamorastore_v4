@@ -87,16 +87,15 @@
              ?>
              
            </tbody>
-          <!--
+          
            <tfoot>
              <tr>
-                <th colspan='6' style='text-align:right'><b>Total</b></th>
-                <th style='text-align:right'><b>Rp.<?php echo rupiah($tot_debet)?></b></th>
-                <th style='text-align:right'><b>Rp.<?php echo rupiah($tot_kredit)?></b></th>
-                <th style='text-align:right'><b>Rp.<?php echo rupiah($total)?></b></th>
+                <th colspan='8' style='text-align:right'><b>Total</b></th>
+                
+                <th style='text-align:right'><b>Rp.<?php echo rupiah($pelanggan->saldo)?></b></th>
              </tr>
            </tfoot>
-         -->
+         
          </table>
 
 

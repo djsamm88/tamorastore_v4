@@ -139,7 +139,7 @@
 
 
             <div id="t4_info_form"></div>
-            <button type="submit" class="btn btn-primary"> Simpan </button>
+            <button type="submit" id="btn_simpan" class="btn btn-primary"> Simpan </button>
           </form>
 
           <div style="clear: both;"></div>
@@ -232,7 +232,7 @@ $("#form_trx").on("submit",function(){
                 console.log(e);
                 
                 $("#t4_info_form").html("<div class='alert alert-success'>Sukses! "+e+"</div>");
-                
+                $("#btn_simpan").hide();
             },
             error: function(er){
                 $("#info").html("<div class='alert alert-warning'>Ada masalah! "+er+"</div>");
