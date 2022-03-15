@@ -307,11 +307,16 @@ class Barang extends CI_Controller {
 		$serialize['harga_ekspedisi'] 		 = hanya_nomor($data['harga_ekspedisi']);
 
 		/*********** insert ke transaksi **************/	
-		$ket = "Kpd: [".$data['nama_pembeli']."] - Kode TRX:[".$data['grup_penjualan']."] 
-				Jumlah:[".rupiah($total_tanpa_diskon)."] 
+		$ket = "Kpd: [".$data['nama_pembeli']."] - Kode TRX:[".$data['grup_penjualan']."] 				
 				diskon:[".$data['diskon']."] 
 				harga_ekspedisi:[".$serialize['harga_ekspedisi']."] 
 				transport_ke_ekspedisi:[".$data['transport_ke_ekspedisi']."] 
+
+				<br>
+				- Jumlah:[".rupiah($total_tanpa_diskon)."] <br>
+				- Saldo :".rupiah(hanya_nomor($data['saldo']))."<br>
+				- Bayar :".rupiah(hanya_nomor($data['bayar']))."<br>
+				
 				".$data['keterangan'];
 
 		$ser_trx = array(
@@ -348,8 +353,40 @@ class Barang extends CI_Controller {
 		/********* insert diskon **********/
 		
 
-		//utang/piutang
-		if(hanya_nomor($data['saldo'])!=0)
+		//selisih 
+		if(hanya_nomor($data['selisih'])!=0)
+		{
+			if($data['selisih']<0)
+			{
+				$ser_saldo['id_group']='17';	
+			}else{
+				$ser_saldo['id_group']='18';	
+			}
+			
+			
+			$saldo_plus = hanya_nomor($data['selisih']);
+
+			$this->db->query("UPDATE tbl_pelanggan SET saldo=('$saldo_plus') WHERE id_pelanggan='$id_pelanggan'");
+
+			$jumlah = hanya_nomor($data['selisih']);			
+			$ser_saldo['jumlah'] 		= str_replace("-", "", $jumlah);
+			$ser_saldo['keterangan'] 	= "Saldo potong langsung saat belanja dengan ID TRX:"
+										  .$data['grup_penjualan']." - A.n : "
+										  .$data['nama_pembeli']." - ID :"
+										  .$id_pelanggan."<br>".$ket;
+
+			$ser_saldo['id_referensi'] = $data['grup_penjualan'];
+			$ser_saldo['id_pelanggan'] = $id_pelanggan;
+			$ser_saldo['id_cabang']	   = $id_cabang;
+
+			$this->db->set($ser_saldo);
+			$this->db->insert('tbl_transaksi');
+		}
+
+
+		//piutang
+		/*
+		if(hanya_nomor($data['saldo'])>=0)
 		{
 			if($data['saldo']<0)
 			{
@@ -376,7 +413,8 @@ class Barang extends CI_Controller {
 			$this->db->set($ser_saldo);
 			$this->db->insert('tbl_transaksi');
 		}
-		
+		*/
+		 
 
 		// sales //
 

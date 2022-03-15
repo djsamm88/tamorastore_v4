@@ -280,7 +280,7 @@ if(isset($group_penjualan))
 
         <tr>
           <td colspan="7" align="right"><b>Selisih</b></td>
-          <td  align="right" id="t4_kembali">
+          <td  align="right" ><input id="t4_kembali" type="text" class="form-control" name="selisih" readonly>
           
           </td>
           <td></td>
@@ -870,7 +870,7 @@ $("#t4_bayar").on("keydown keyup mousedown mouseup select contextmenu drop",func
     var bayar = parseInt(buang_titik($(this).val()));
 
     var kembalian = bayar - tot;
-    $("#t4_kembali").html(formatRupiah(kembalian));
+    $("#t4_kembali").val(formatRupiah(kembalian));
     console.log(tot);
 
 })

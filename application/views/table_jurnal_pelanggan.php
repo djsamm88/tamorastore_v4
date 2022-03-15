@@ -87,6 +87,7 @@
              ?>
              
            </tbody>
+          <!--
            <tfoot>
              <tr>
                 <th colspan='6' style='text-align:right'><b>Total</b></th>
@@ -95,6 +96,7 @@
                 <th style='text-align:right'><b>Rp.<?php echo rupiah($total)?></b></th>
              </tr>
            </tfoot>
+         -->
          </table>
 
 

@@ -88,6 +88,22 @@ font-size:10px;
 	
 	$total_diskon = $tot-$data[0]->diskon;
 	$total = $total_diskon+$data[0]->harga_ekspedisi+$data[0]->transport_ke_ekspedisi-$data[0]->saldo;
+
+
+	if(($data[0]->bayar - $total)<0)
+	{
+		$utang_piutang = "Utang";
+	}
+
+	if(($data[0]->bayar - $total)>0){
+		$utang_piutang = "Saldo";
+	}
+
+	if(($data[0]->bayar - $total)==0)
+	{
+		$utang_piutang = "Utang";	
+	}
+
 	echo "
 		<tr>
 			<td colspan=5 align=right>Total</td>
@@ -119,7 +135,7 @@ font-size:10px;
 		</tr>
 		
 		<tr>
-			<td colspan=5 align=right>Kembali</td>
+			<td colspan=5 align=right>$utang_piutang</td>
 			<td align=right><b>" . rupiah($data[0]->bayar - $total) . "</b></td>
 		</tr>
 	";
