@@ -43,6 +43,25 @@
           
           <div style="clear: both"></div>
         </div>
+
+
+
+              <div class="alert alert-info">
+              <form id="go_trx_jurnal_pel">
+                  <div class="col-sm-5">
+                      <input type="text" class="form-control datepicker" name="tgl_awal" id="tgl_awal"  value="<?php echo @$tgl_awal ?>" autocomplete="off">
+                  </div>
+                  <div class="col-sm-5">
+                    <input type="text" class="form-control datepicker" name="tgl_akhir" id="tgl_akhir"  value="<?php echo @$tgl_akhir ?>" autocomplete="off">
+                  </div>
+                  <div class="col-sm-2">
+                    <input type="submit" class="btn btn-primary btn-block" value="Go">
+                  </div>
+              </form>
+              <div style="clear: both"></div>
+            </div>
+
+
          <table class="table table-bordered" id="tbl_jurnal">
            <thead>
              <tr>
@@ -101,22 +120,39 @@
 
 
       </div>
-      <!--
+      
       <input type="button" class="btn btn-primary" value="Download" id="download_pdf">
-      -->
+      
       <!-- /.box -->
     </div>
 </section>
     <!-- /.content -->
 
 <script type="text/javascript">
-  
+  $('.datepicker').datepicker({
+    autoclose: true,
+    format: 'yyyy-mm-dd' 
+  })
 $("#download_pdf").on("click",function(){
-  var ser = $("#go_trx_jurnal").serialize();
-  var url="<?php echo base_url()?>index.php/laporan_keuangan/laporan_jurnal_pdf/?"+ser;
+    var tgl_awal = $("#tgl_awal").val();
+    var tgl_akhir = $("#tgl_akhir").val();
+    var id_pelanggan = "<?php echo $id_pelanggan?>";
+  var url='<?php echo base_url()?>index.php/laporan_keuangan/laporan_jurnal_pelanggan_xl/?id_pelanggan='+id_pelanggan+'&tgl_awal='+tgl_awal+'&tgl_akhir='+tgl_akhir;
   window.open(url);
 
   return false;
 })
 
+
+
+
+
+$("#go_trx_jurnal_pel").on("submit",function(){
+    var tgl_awal = $("#tgl_awal").val();
+    var tgl_akhir = $("#tgl_akhir").val();
+    var id_pelanggan = "<?php echo $id_pelanggan?>";
+    eksekusi_controller('<?php echo base_url()?>index.php/laporan_keuangan/laporan_jurnal_pelanggan/?id_pelanggan='+id_pelanggan+'&tgl_awal='+tgl_awal+'&tgl_akhir='+tgl_akhir,'Transaksi Pelanggan');
+
+    return false;
+})
 </script>

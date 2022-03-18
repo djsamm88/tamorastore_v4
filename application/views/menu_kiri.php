@@ -456,7 +456,7 @@
               <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/form_barang_sementara','Barang Masuk');return false;">
                 <i class="fa fa-lock"></i> <span>Barang Masuk</span>
               </a>
-            </li>
+            </li> 
             
             <li>
               <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/stok_gudang/?id_gudang=1&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Stok Gudang');return false;">

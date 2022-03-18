@@ -145,6 +145,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 		return $q->result();
 	}
 
+
 	public function m_barang_transaksi($id_cabang,$mulai,$selesai)
 	{
 		$q=$this->db->query("SELECT 

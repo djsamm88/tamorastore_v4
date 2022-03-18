@@ -127,11 +127,39 @@ class Laporan_keuangan extends CI_Controller {
 	}
 
 
-	public function laporan_jurnal_pelanggan($id_pelanggan)
+	public function laporan_jurnal_pelanggan()
 	{
-		$data['all'] = $this->m_laporan_keuangan->m_jurnal_pelanggan($id_pelanggan);		
+		$id_pelanggan = $this->input->get('id_pelanggan');
+		$tgl_awal = $this->input->get('tgl_awal');
+		$tgl_akhir = $this->input->get('tgl_akhir');
+		$data['all'] = $this->m_laporan_keuangan->m_jurnal_pelanggan($id_pelanggan,$tgl_awal,$tgl_akhir);
 		$data['pelanggan'] = $this->m_pelanggan->m_by_id($id_pelanggan)[0];		
+		$data['tgl_awal'] = $tgl_awal;
+		$data['tgl_akhir'] = $tgl_akhir;
+		$data['id_pelanggan'] = $id_pelanggan;
+
 		$this->load->view('table_jurnal_pelanggan',$data);
+	}
+
+	public function laporan_jurnal_pelanggan_xl()
+	{
+		$id_pelanggan = $this->input->get('id_pelanggan');
+		$tgl_awal = $this->input->get('tgl_awal');
+		$tgl_akhir = $this->input->get('tgl_akhir');
+
+		$file = "lap_trx_pelanggan-$tgl_awal-$tgl_akhir.xls";
+		header("Content-type: application/octet-stream");
+		header("Content-Disposition: attachment; filename=$file");
+		header("Pragma: no-cache");
+		header("Expires: 0");	
+
+		$data['all'] = $this->m_laporan_keuangan->m_jurnal_pelanggan($id_pelanggan,$tgl_awal,$tgl_akhir);
+		$data['pelanggan'] = $this->m_pelanggan->m_by_id($id_pelanggan)[0];		
+		$data['tgl_awal'] = $tgl_awal;
+		$data['tgl_akhir'] = $tgl_akhir;
+		$data['id_pelanggan'] = $id_pelanggan;
+
+		$this->load->view('table_jurnal_pelanggan_xl',$data);
 	}
 
 

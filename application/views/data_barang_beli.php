@@ -79,6 +79,9 @@
                   <br>
                   <small><i>Harga Jual Koli</i></small>
                   <input class='form-control nomor' name='harga_koli' value='$x->harga_koli' id='harga_koli'>
+                  <br>
+                  <small><i>Harga Jual Partai</i></small>
+                  <input class='form-control nomor' name='harga_partai' value='$x->harga_partai' id='harga_partai'>
                 </td>  
                 
 

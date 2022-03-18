@@ -229,7 +229,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 		return $q->result();
 	}
 
-	public function m_jurnal_pelanggan($id_pelanggan)
+	public function m_jurnal_pelanggan($id_pelanggan,$tgl_awal,$tgl_akhir)
 	{
 		$id_cabang=$this->session->userdata('id_cabang');
 		$q = $this->db->query("
@@ -266,6 +266,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 							WHERE 
 							a.id_pelanggan='$id_pelanggan'
 							AND (a.id_group='17' OR a.id_group='18')
+							AND a.tanggal BETWEEN '$tgl_awal' AND '$tgl_akhir'
 							
 							
 						");

@@ -58,18 +58,22 @@
           if($x->satuan == 'koli')
           {
             $jum = $x->jumlah*$x->jum_per_koli;
+            $jum_satuan = $x->jum_per_koli;
           }
           if($x->satuan == 'lusin')
           {
             $jum = $x->jumlah*$x->jum_per_lusin;
+            $jum_satuan = $x->jum_per_lusin;
           }
           if($x->satuan == 'retail')
           {
             $jum = $x->jumlah*1;
+            $jum_satuan = 1;
           }
           if($x->satuan == 'partai')
           {
             $jum = $x->jumlah*$x->jum_partai;
+            $jum_satuan = $x->jum_partai;
           }
 
             echo (" 
@@ -81,7 +85,10 @@
                 <td id='qty_awal'>$x->jumlah - $x->satuan <br>($jum pcs)</td>    
                          
                 <td class='warning'>
-                  <input class='form-control' name='qty' type='number' id='qty' value='$jum' readonly>                  
+                  <input class='form-control' name='qty' type='number' id='qty' value='$jum' >                  
+                  <input class='form-control' name='qty_awal' type='number' id='qty_awalnya' value='$jum' readonly>                  
+                  <input class='form-control' name='jum_satuan' type='number' id='jum_satuan' value='$jum_satuan' readonly>                  
+                  <input class='form-control' name='satuan' type='text' id='satuan' value='$x->satuan' readonly>                  
                 </td>
                 <td class='warning'>
                   <select class='form-control' name='id_gudang' required id='id_gudang'>
@@ -203,9 +210,20 @@ function go_beli(ini)
   
     
     var qty = buang_titik(ini.parent().parent().find("#qty").val());
+    var qty_awal = buang_titik(ini.parent().parent().find("#qty_awalnya").val());
+    var jum_satuan = buang_titik(ini.parent().parent().find("#jum_satuan").val());
+    var satuan = (ini.parent().parent().find("#satuan").val());
+
     var id_barang  = ini.parent().parent().find("#id_barang").text();
     var id_gudang = ini.parent().parent().find("#id_gudang").val();
     //console.log((harga_beli));
+      
+      var sisa = qty_awal - qty;
+      var sisa_satuan = sisa/jum_satuan;
+
+      //console.log(sisa);
+      console.log(sisa_satuan);
+
     
     if(qty == "")
     {
@@ -226,7 +244,7 @@ function go_beli(ini)
 
     if(confirm("Anda yakin?"))
     {
-      var ser = {id_barang:id_barang,qty:qty,id_gudang:id_gudang};
+      var ser = {id_barang:id_barang,qty:qty,id_gudang:id_gudang,qty_awal:qty_awal,jum_satuan:jum_satuan,satuan:satuan};
       $.post("<?php echo base_url()?>index.php/"+classnya+"/go_simpan_sementara",ser,function(x){
         console.log(x);        
         toastr["success"]("Barang telah ditambahkan.", "Sukses");
@@ -234,6 +252,8 @@ function go_beli(ini)
         notif();
       })
     }
+
+    
 
 }
 

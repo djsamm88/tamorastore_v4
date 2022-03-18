@@ -26,7 +26,6 @@ class Barang extends CI_Controller {
 	}
 
 
-
 	public function form_barang_sementara()
 	{
 		$data['all'] = $this->m_barang->barang_masuk_order();	
@@ -40,11 +39,38 @@ class Barang extends CI_Controller {
 		$id_cabang = $this->session->userdata('id_cabang');
 		$serialize = $this->input->post();
 		$serialize['id_cabang'] = $id_cabang;
+		$qty_awal = $serialize['qty_awal'];
+		$jum_satuan = $serialize['jum_satuan'];
+		$satuan = $serialize['satuan'];
+		
+
+
+		unset($serialize['qty_awal']);
+		unset($serialize['jum_satuan']);
+		unset($serialize['satuan']);
+
+		
 		$this->db->set($serialize);
 		$this->db->insert('tbl_barang_masuk_tanpa_harga');
 
 		$id_barang=$serialize['id_barang'];
+		if($qty_awal!=$serialize['qty'])
+		{
+			$sisa = $qty_awal-$serialize['qty'];
+			$sisa_satuan = $sisa/$jum_satuan;
+			
+		$this->db->query("UPDATE tbl_pembelian_barang SET jumlah='$sisa',satuan='retail' WHERE id_barang='$id_barang' AND status='Gudang'");
+
+		}else{
+
+			
 		$this->db->query("UPDATE tbl_pembelian_barang SET status='Masuk' WHERE id_barang='$id_barang' AND status='Gudang'");
+	
+		}
+
+		
+
+
 	}
 
 

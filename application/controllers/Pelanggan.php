@@ -201,6 +201,7 @@ class Pelanggan extends CI_Controller {
 	{
 		$data['all'] = $this->m_pelanggan->m_data();			
 		$this->load->view('transaksi_pelanggan.php',$data);
+		
 	}
  
 	public function jadikan_member($id_pelanggan)

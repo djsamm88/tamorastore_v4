@@ -27,6 +27,8 @@
         </div>
         <div class="box-body">
               
+
+   <div class="table-responsive">     
   <table id="tbl_newsnya" class="table  table-striped table-bordered"  cellspacing="0" width="100%">
       <thead>
         <tr>
@@ -176,13 +178,14 @@ $('.judul,th').text(function(i, text) {
 $(document).ready(function(){
 
   $('#tbl_newsnya').dataTable();
-
+ 
 });
 
 function detail(id_pelanggan)
 {
-  
-  eksekusi_controller('<?php echo base_url()?>index.php/laporan_keuangan/laporan_jurnal_pelanggan/'+id_pelanggan,'Transaksi Pelanggan');
+  var tgl_awal = "<?php echo date('Y-m-')?>01";
+  var tgl_akhir = "<?php echo date('Y-m-d',strtotime('+1 days'));?>";
+  eksekusi_controller('<?php echo base_url()?>index.php/laporan_keuangan/laporan_jurnal_pelanggan/?id_pelanggan='+id_pelanggan+'&tgl_awal='+tgl_awal+'&tgl_akhir='+tgl_akhir,'Transaksi Pelanggan');
 }
 
 function utang(id_pelanggan)
