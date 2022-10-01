@@ -28,8 +28,33 @@
         </div>
         <div class="box-body">
           <div class="alert alert-info">
-          <form id="go_trx_jurnal">
+          <form id="go_history_order">
               
+
+              <div class="col-sm-3">
+                <select name="nama_suplier" id="nama_suplier" class="form-control select2" >
+                  <option value=""> --- pilih Pelanggan --- </option>
+                  <?php 
+                    $q_suplier = $this->db->query("SELECT nama_suplier,hp_suplier FROM tbl_pembelian_barang GROUP BY nama_suplier");
+                    $qq = $q_suplier->result();
+
+                    foreach($qq as $pel)
+                    {
+                      
+                      echo "
+                        <option value='$pel->nama_suplier' $sel>$pel->nama_suplier - $pel->hp_suplier</option>
+                      ";
+                    }
+                  ?>                  
+              </select>
+              </div>
+               <div class="col-sm-2">
+                  <input type="text" class="form-control datepicker" name="mulai" id="mulai"  value="<?php echo $mulai ?>" autocomplete="off">
+              </div>
+              <div class="col-sm-2">
+                <input type="text" class="form-control datepicker" name="selesai" id="selesai"  value="<?php echo $selesai ?>" autocomplete="off">
+              </div>
+
 
               <div class="col-sm-3">
                 <select name="id_cabang" id="id_cabang" class="form-control">
@@ -51,6 +76,8 @@
                   ?>                  
               </select>
               </div>
+
+
               <div class="col-sm-2">
                 <input type="submit" class="btn btn-primary btn-block" value="Go">
               </div>
@@ -212,17 +239,19 @@ $('.datepicker').datepicker({
 })
 
 
-$("#go_trx_jurnal").on("submit",function(){
+$("#go_history_order").on("submit",function(){
     var mulai   = $("#mulai").val();
     var selesai  = $("#selesai").val();
     var id_cabang  = $("#id_cabang").val();
+    var nama_suplier  = $("#nama_suplier").val();
+    
     if( (new Date(mulai).getTime() > new Date(selesai).getTime()))
     {
       alert("Perhatikan pengisian tanggal. Ada yang salah.");
       return false;
     }
 
-    eksekusi_controller('<?php echo base_url()?>index.php/barang/tbl_pembelian_barang/?mulai='+mulai+'&selesai='+selesai+'&id_cabang='+id_cabang,'Status Order');
+    eksekusi_controller('<?php echo base_url()?>index.php/barang/history_tbl_pembelian_barang/?mulai='+mulai+'&selesai='+selesai+'&id_cabang='+id_cabang+'&nama_suplier='+nama_suplier,'History Order');
   return false;
 })
 

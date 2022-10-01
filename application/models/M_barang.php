@@ -14,7 +14,14 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 
 	public function m_lap_penjualan_per_barang($id_barang,$mulai,$selesai,$id_cabang='')
 	{	
-		$where="";
+		
+		if($id_barang=="")
+		{
+			$where="";	
+		}else{
+			$where=" AND a.id_barang='$id_barang' ";
+		}
+		
 		
 		
 
@@ -32,17 +39,20 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 				a.harga_ekspedisi,
 				a.transport_ke_ekspedisi,
 				a.id_pelanggan,
+				a.jumlah,
 				b.nama_admin,
 				b.email_admin 
 			FROM tbl_barang_transaksi a
 			LEFT JOIN tbl_admin b ON a.id_admin=b.id_admin
 			WHERE a.jenis='keluar' AND (a.harga_beli <> 0 AND a.harga_jual <> 0) $where 
-				AND a.tgl_transaksi BETWEEN '$mulai' AND '$selesai' AND a.id_cabang='$id_cabang' AND a.id_barang='$id_barang'
+				AND a.tgl_transaksi BETWEEN '$mulai' AND '$selesai' AND a.id_cabang='$id_cabang' 
 			GROUP BY grup_penjualan
 			ORDER BY tgl_transaksi DESC
 			");
 
 		return $q->result();
+
+		
 	}
 
 
@@ -100,14 +110,23 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 
 
 
-	public function history_tbl_pembelian_barang($id_cabang)
+	public function history_tbl_pembelian_barang($nama_suplier,$mulai,$selesai,$id_cabang)
 	{
+
+		if($nama_suplier=="")
+		{
+			$n="";
+		}else{
+			$n=" AND nama_suplier='$nama_suplier' ";
+		}
+
 		$q = $this->db->query("
 				SELECT a.*,b.nama_admin 
 					FROM tbl_pembelian_barang a 
 					LEFT JOIN tbl_admin b 
 					ON a.id_admin=b.id_admin
-					WHERE status='Masuk'
+					WHERE status='Masuk' $n
+					  AND a.tgl BETWEEN '$mulai' AND '$selesai'
 				GROUP BY a.group_trx
 				ORDER BY a.tgl DESC
 				");
@@ -648,7 +667,8 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 					a.*,
 					b.*,
 					c.nama_admin,
-					d.saldo
+					d.saldo,
+					DATE_ADD(tgl_transaksi, INTERVAL lama_return DAY) as batas_return
 
 				FROM tbl_barang_transaksi a 
 				LEFT JOIN tbl_barang b 
@@ -709,6 +729,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 				a.harga_ekspedisi,
 				a.transport_ke_ekspedisi,
 				a.id_pelanggan,
+				a.bayar,
 				b.nama_admin,
 				b.email_admin 
 			FROM tbl_barang_transaksi a

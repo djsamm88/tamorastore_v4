@@ -79,6 +79,8 @@
               <th>Transport Ke Ekspedisi</th>                     
               <th>Saldo</th>                     
               <th>Total</th>                     
+              <th>Bayar</th>                     
+              <th>Saldo</th>                     
               <th>Struk</th>                     
               
               
@@ -88,10 +90,18 @@
         <?php
         $total_all=0;         
         $no = 0;
+        
         foreach($all as $x)
         {
+          $total_utang = 0;
+
           $total = $x->total-$x->saldo-$x->diskon+($x->harga_ekspedisi+$x->transport_ke_ekspedisi);
           $total_all+=$total;
+          
+          //ambil utang/piutang 
+          
+          $saldo = $x->bayar-$total;
+
           $no++;
             
             echo (" 
@@ -108,6 +118,9 @@
                 <td align=right>".rupiah($x->transport_ke_ekspedisi)."</td>                
                 <td align=right>".rupiah($x->saldo)."</td>                
                 <td align=right>".rupiah($total)."</td>                
+                <td align=right>".rupiah($x->bayar)."</td>                
+                <td align=right>".rupiah($saldo)."</td>                
+
                 <td><a href='".base_url()."index.php/barang/struk_penjualan/".$x->grup_penjualan."' target='blank'>Print</a></td>                                
               </tr>
           ");
@@ -121,6 +134,8 @@
              <tr>
                 <th colspan='10' style='text-align:right'><b>Total</b></th>
                 <th style='text-align:right'><b>Rp.<?php echo rupiah($total_all)?></b></th>
+                
+
              </tr>
            </tfoot>
   </table>

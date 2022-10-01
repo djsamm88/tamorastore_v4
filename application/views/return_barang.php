@@ -137,6 +137,38 @@
                 </div>
                 <div style="clear: both;"></div><br>
 
+                <div class="col-sm-4">
+                  Nama Kasir
+                </div>                
+                <div class="col-sm-8" >
+                  <input  class="form-control nama_admin" id="nama_admin" name="nama_admin_lama" readonly>
+                  <input type="hidden"   class="form-control" name="id_admin_lama" id="id_admin_lama" readonly>
+                  <input type="hidden"   class="form-control" name="group_trx_lama" id="group_trx_lama" readonly>
+                  
+                </div>
+                <div style="clear: both;"></div><br>
+
+                <div class="col-sm-4">
+                  Tgl Transaksi
+                </div>                
+                <div class="col-sm-8" >
+                  <input  class="form-control tgl_transaksi" id="tgl_transaksi" name="" readonly>
+                  
+                </div>
+                <div style="clear: both;"></div><br>
+
+                <div class="col-sm-4">
+                  Batas Return
+                </div>                
+                <div class="col-sm-8" >
+                  <input  class="form-control lama_return" id="lama_return" name="" readonly>
+                  <input  type="hidden" class="form-control batas_return" id="batas_return" name="" >
+                  
+                </div>
+                <div style="clear: both;"></div><br>
+
+                
+
 
                 <div class="col-sm-4">
                   Keterangan                
@@ -204,6 +236,8 @@
               <th>No HP</th>                     
               <th>Kondisi</th>                     
               <th>Gudang</th>                     
+              <th>Kasir</th>                     
+              <th>Kode TRX</th>                     
               <th>Keterangan</th>                     
               <th>Tgl</th>
               <th>Action</th>                     
@@ -233,6 +267,8 @@
                 <td>$x->hp_pembeli</td>                
                 <td>$x->kondisi</td>                
                 <td>$x->nama_gudang</td>                
+                <td>$x->nama_admin_lama</td>                
+                <td>$x->group_trx_lama</td>                
                 <td>$x->ket</td>                
                 <td>$x->tgl_trx</td>                
                 <td>$btn</td>                
@@ -297,6 +333,17 @@ $("#form_return_by_grup_penjualan").on("submit",function(){
 
                 $("#nama_pembeli").val(b.nama_pembeli);
                 $("#id_pelanggan").val(b.id_pelanggan);
+                $("#id_admin_lama").val(b.id_admin);
+                $("#nama_admin").val(b.nama_admin);
+                $("#group_trx_lama").val(grup_penjualan);
+                $("#tgl_transaksi").val(b.tgl_transaksi);
+                
+
+                
+                $("#lama_return").val(b.lama_return+" hari - Sampai dengan "+b.batas_return);
+                $("#batas_return").val(b.batas_return);
+
+                
           })
               tabel_data += "</select>";
 
@@ -307,6 +354,12 @@ $("#form_return_by_grup_penjualan").on("submit",function(){
 
     return false;
 })
+
+function addDays(date, days) {
+  var result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
 
 /*
 $("#jumlah_barang").on("keydown keyup mousedown mouseup select contextmenu drop",function(){
@@ -450,13 +503,22 @@ $("#jumlah_barang").on("keydown keyup mousedown mouseup select contextmenu drop"
 
 $("#form_return").on("submit",function(){
   console.log($(this).serialize());
-  if(confirm("Anda yakin?"))
+
+  if(new Date($("#batas_return").val())<new Date("<?php echo date('Y-m-d H:i:s')?>"))
   {
-    $.post("<?php echo base_url()?>index.php/barang/go_return_barang",$(this).serialize(),function(e){
-      cetak(e);
-      eksekusi_controller('<?php echo base_url()?>index.php/barang/return_barang','Return Barang');
-    })
+    alert("return barang tidak bisa lagi.");
+    return false
+  }else{
+    if(confirm("Anda yakin?"))
+    {
+      $.post("<?php echo base_url()?>index.php/barang/go_return_barang",$(this).serialize(),function(e){
+        cetak(e);
+        eksekusi_controller('<?php echo base_url()?>index.php/barang/return_barang','Return Barang');
+      })
+    }  
   }
+
+  
   return false;
 })
 

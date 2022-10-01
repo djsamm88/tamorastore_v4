@@ -36,6 +36,14 @@ class Pembayaran extends CI_Controller {
 		$this->load->view('data_pembayaran',$data);
 	}
 
+
+	public function bank_cek()
+	{
+		$data['all'] = $this->m_pembayaran->m_data_paket();	
+		$this->load->view('bank_cek',$data);
+	}
+
+
 	public function form_pembayaran()
 	{
 		$data['id_paket'] = $this->input->get('id_paket');

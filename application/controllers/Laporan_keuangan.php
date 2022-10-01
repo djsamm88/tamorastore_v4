@@ -128,7 +128,7 @@ class Laporan_keuangan extends CI_Controller {
 
 
 	public function laporan_jurnal_pelanggan()
-	{
+	{ 
 		$id_pelanggan = $this->input->get('id_pelanggan');
 		$tgl_awal = $this->input->get('tgl_awal');
 		$tgl_akhir = $this->input->get('tgl_akhir');
@@ -279,6 +279,27 @@ class Laporan_keuangan extends CI_Controller {
 		$data['tgl_awal'] = $tgl_awal;
 		$data['tgl_akhir'] = $tgl_akhir;
 		$this->load->view('detail_arus_kas',$data);
+	}
+
+
+
+	public function bank_cek()
+	{
+		$tgl_awal = $this->input->get('mulai');
+		$tgl_akhir = $this->input->get('selesai');
+		$jenis_trx = $this->input->get('jenis_trx');
+
+		$id_group = "18";
+		$data['all'] = $this->m_laporan_keuangan->m_detail_arus_kas_bank_cek($id_group,$tgl_awal,$tgl_akhir,$jenis_trx);
+		$data['mulai'] = $tgl_awal;
+		$data['selesai'] = $tgl_akhir;
+		$data['jenis_trx'] = $jenis_trx;
+		$this->load->view('bank_cek',$data); 
+	}
+
+	public function bank_cek_setujui($id)
+	{
+		$this->db->query("UPDATE tbl_transaksi SET cek_bank='sudah' WHERE id='$id'");
 	}
 
 

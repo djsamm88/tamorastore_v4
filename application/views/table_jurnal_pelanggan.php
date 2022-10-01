@@ -74,6 +74,7 @@
                 <th>Debet</th>
                 <th>Kredit</th>
                 <th>Saldo</th>
+                <th>Struk</th>
              </tr>
            </thead>
            <tbody>
@@ -88,6 +89,20 @@
                 $tot_debet+=$key->debet;
                 $tot_kredit+=$key->kredit;
 
+                  $x=$key;
+                 if(strlen($x->id_referensi)>=14)
+                  {
+                    $btn_detail = "
+                      <a href='".base_url()."index.php/barang/struk_penjualan/".$x->id_referensi."' target='blank'>Print</a>
+
+                    ";
+
+                  }else{
+                    $btn_detail = "";
+
+                  }
+
+
                 echo "
                   <tr>
                     <td>$no</td>
@@ -100,6 +115,7 @@
                     <td style='text-align:right'>".rupiah($key->debet)."</td>
                     <td style='text-align:right'>".rupiah($key->kredit)."</td>
                     <td style='text-align:right'>".rupiah($key->saldo)."</td>
+                    <td>$btn_detail</td>
                   </tr>
                 ";
               }

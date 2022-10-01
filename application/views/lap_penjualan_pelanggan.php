@@ -37,7 +37,7 @@
               </div>
 
               <div class="col-sm-3">
-                <select name="id_pelanggan" id="id_pelanggan" class="form-control">
+                <select name="id_pelanggan" id="id_pelanggan" class="form-control select2" >
                   <option value=""> --- pilih Pelanggan --- </option>
                   <?php 
                     
@@ -207,5 +207,12 @@ $(document).ready(function(){
   //$('#tbl_datanya_barang').dataTable();
 
 });
+
+$(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2()
+
+})
+
 $("#judul2").html("DataTable "+document.title);
 </script>

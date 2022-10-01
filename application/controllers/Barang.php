@@ -148,7 +148,7 @@ class Barang extends CI_Controller {
 			$serialize['nama_pembeli'] 	= $data['nama_pembeli'];
 			$serialize['hp_pembeli'] 	= $data['hp_pembeli'];
 			
-			$serialize['nama_packing'] 	= $data['nama_packing'];
+			//$serialize['nama_packing'] 	= $data['nama_packing'];
 			$serialize['tgl_trx_manual']= $data['tgl_trx_manual'];
 			$serialize['keterangan']	= $data['keterangan'];
 
@@ -317,6 +317,8 @@ class Barang extends CI_Controller {
 			$serialize['jumlah'] = $data['jumlah'][$key];
 
 			$serialize['id_cabang'] = $id_cabang;
+
+			$serialize['lama_return'] = $data['lama_return'];
 
 			/************ insert ke tbl_barang_transaksi *************/
 			$this->m_barang->insert_trx_barang($serialize);
@@ -663,10 +665,12 @@ class Barang extends CI_Controller {
 		$mulai = $this->input->get('mulai');
 		$selesai = $this->input->get('selesai');
 		$id_cabang = $this->input->get('id_cabang');
-		$data['all'] = $this->m_barang->history_tbl_pembelian_barang($id_cabang);
+		$nama_suplier = $this->input->get('nama_suplier');
+		$data['all'] = $this->m_barang->history_tbl_pembelian_barang($nama_suplier,$mulai,$selesai,$id_cabang);
 		$data['mulai']=$mulai;
 		$data['selesai']=$selesai;
 		$data['id_cabang']=$id_cabang;
+		$data['nama_suplier']=$nama_suplier;
 
 		$this->load->view('tbl_pembelian_barang',$data);
 
@@ -1007,6 +1011,7 @@ class Barang extends CI_Controller {
 
 	public function go_return_barang()
 	{
+
 		$id_cabang = $this->session->userdata('id_cabang');
 		$data = $this->input->post();
 		$nama_barang = $data['nama_barang'];
@@ -1044,24 +1049,32 @@ class Barang extends CI_Controller {
 		$ret_nama_barang = "RETURN_ ".$nama_barang;
 		$x = $this->db->query("SELECT * FROM tbl_barang WHERE nama_barang='$ret_nama_barang'");
 
-
-		if ($x->num_rows()>0){
-			//echo "Found!";
-			$y = $x->result();
-			$z = $y[0];
-			$insert_baru['nama_barang'] = $z->nama_barang;
-			$id_baru = $z->id;
+		if($data['kondisi']=='baik')
+		{	
+			$id_baru=$data['id_barang'];
 
 		}else{
-			$insert_baru['nama_barang'] = "RETURN_ ".$nama_barang;
-			$insert_baru['return'] 		= "1";
 
-			$this->db->set($insert_baru);
-			$this->db->insert('tbl_barang');
-			$id_baru = $this->db->insert_id();
+			if ($x->num_rows()>0){
+				//echo "Found!";
+				$y = $x->result();
+				$z = $y[0];
+				$insert_baru['nama_barang'] = $z->nama_barang;
+				$id_baru = $z->id;
+
+			}else{
+				$insert_baru['nama_barang'] = "RETURN_ ".$nama_barang;
+				$insert_baru['return'] 		= "1";
+
+				$this->db->set($insert_baru);
+				$this->db->insert('tbl_barang');
+				$id_baru = $this->db->insert_id();
 
 
+			}
 		}
+
+		
 
 
 			//arahkan ke barang masuk setelah diinsert ke tbl barang
@@ -1453,6 +1466,7 @@ class Barang extends CI_Controller {
 		$data['barang'] = $this->m_barang->m_data();
 
 		$data['all'] = $this->m_barang->m_lap_penjualan_per_barang($id_barang,$mulai,$selesai,$id_cabang);	
+		
 		$this->load->view('lap_penjualan_per_barang',$data);	
 	}
 
@@ -1710,6 +1724,7 @@ class Barang extends CI_Controller {
 		$harga_retail = $this->input->post('harga_retail');
 		$harga_lusin = $this->input->post('harga_lusin');
 		$harga_koli = $this->input->post('harga_koli');
+		$harga_partai = $this->input->post('harga_partai');
 
 		$id_barang = $this->input->post('id_barang');
 		$id_gudang = $this->input->post('id_gudang');
@@ -1734,7 +1749,8 @@ class Barang extends CI_Controller {
 							harga_pokok='$harga_beli', 
 							harga_retail='$harga_retail', 
 							harga_lusin='$harga_lusin', 
-							harga_koli='$harga_koli'
+							harga_koli='$harga_koli',
+							harga_partai='$harga_partai'
 							WHERE 
 							id='$id_barang'
 						");

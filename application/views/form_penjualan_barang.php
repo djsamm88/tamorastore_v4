@@ -291,7 +291,29 @@ if(isset($group_penjualan))
         <tr>
           <td colspan="7" align="right"><b>Sales</b></td>
           <td  align="right" >
-            <input id="id_sales" type="text" name="id_sales" class="form-control " placeholder="id_sales" style="text-align:right;">
+            <select class="form-control" id="id_sales" name="id_sales">
+            <?php 
+              $q = $this->db->query("SELECT * FROM tbl_admin WHERE level=7");
+              $qq = $q->result();
+              echo "<option value=''>--- Pilih Sales ---</option>";
+              foreach($qq as $sal)
+              {
+                echo "<option value='SALES$sal->id_admin'>SALES$sal->id_admin - $sal->nama_admin</option>";
+              }
+            ?>
+            </select>
+            
+          </td>
+          <td></td>
+        </tr>
+
+
+
+
+        <tr>
+          <td colspan="7" align="right"><b>Lama Return</b></td>
+          <td  align="right" ><input id="lama_return" type="text" class="form-control nomor" name="lama_return" >
+          <small>Hari</small>
           </td>
           <td></td>
         </tr>
@@ -749,7 +771,7 @@ function template_auto(abc)
                   $(".barang").val("");
                   
                   //console.log(template);
-              
+              total();
 
 }
 

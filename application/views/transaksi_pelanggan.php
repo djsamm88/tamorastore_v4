@@ -54,6 +54,10 @@
                   <button class='btn btn-danger btn-xs btn-block' onclick='piutang($x->id_pelanggan);return false;'>Piutang</button>    ";
           $no++;
 
+
+          $btn_detail = "<button class='btn btn-primary btn-xs btn-block' onclick='detail($x->id_pelanggan)'>Detail</button>";
+
+         
             echo (" 
               
               <tr>
@@ -64,7 +68,9 @@
                 <td>$x->hp_pembeli</td>
                 <td>$x->tgl_daftar</td>
                 <td>$x->tgl_trx_terakhir</td>
-                <td>".rupiah($x->saldo)." <br> <button class='btn btn-primary btn-xs btn-block' onclick='detail($x->id_pelanggan)'>Detail</button></td>
+                <td>".rupiah($x->saldo)." <br> 
+                      $btn_detail
+                </td>
                 <td>
                   $btn
                 </td>
@@ -116,6 +122,21 @@
             <div class="col-sm-4 judul">Jumlah</div>
             <div class="col-sm-8">
               <input class="form-control nomor" name="jumlah" id="jumlah" type="text">
+            </div>
+            <div style="clear:both"></div>
+            <br>
+
+
+            <div id="hilang_saat_utang">
+            <div class="col-sm-4 judul">Jenis</div>
+            <div class="col-sm-8">
+              <select class="form-control" name="jenis_trx" id="jenis_trx">
+                <option value="cash">Cash</option>
+                <option value="MANDIRI">MANDIRI</option>
+                <option value="BCA">BCA</option>
+                <option value="BRI">BRI</option>
+              </select>
+            </div>
             </div>
             <div style="clear:both"></div>
             <br>
@@ -186,6 +207,7 @@ function detail(id_pelanggan)
   var tgl_awal = "<?php echo date('Y-m-')?>01";
   var tgl_akhir = "<?php echo date('Y-m-d',strtotime('+1 days'));?>";
   eksekusi_controller('<?php echo base_url()?>index.php/laporan_keuangan/laporan_jurnal_pelanggan/?id_pelanggan='+id_pelanggan+'&tgl_awal='+tgl_awal+'&tgl_akhir='+tgl_akhir,'Transaksi Pelanggan');
+
 }
 
 function utang(id_pelanggan)
@@ -201,6 +223,7 @@ function utang(id_pelanggan)
   })
   $("#myModal").modal('show');
   $("#judul_modal").html("<b>Utang</b>");
+  $("#hilang_saat_utang").remove();
 }
 
 

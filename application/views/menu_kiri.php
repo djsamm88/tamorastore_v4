@@ -5,11 +5,30 @@
           </a>
         </li>
 
-   <li>
+            
+        
+           <li>
+            <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/admin/keuangan_harian/?mulai=<?php echo date( 'Y-m-d')?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>','Keuangan Harian');return false;">
+              <i class="fa fa-link"></i> <span>Keuangan Harian</span>
+            </a>
+          </li>
+
+
+            <li>
               <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/barang_transaksi/?mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Transaksi Barang');return false;">
                 <i class="fa fa-link"></i> <span>Lap.Transaksi</span>
               </a>
             </li>
+
+
+
+
+             <li>
+              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/laporan_keuangan/bank_cek/?mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Transaksi Barang');return false;">
+                <i class="fa fa-link"></i> <span>Bank Cek</span>
+              </a>
+            </li>
+
 
  
         <?php 
@@ -280,6 +299,8 @@
         </li>
 
 
+
+
         <!--
         <li class="treeview">
           
@@ -426,9 +447,11 @@
         </li>
 
         <li>
-          <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/history_tbl_pembelian_barang',' Order Suplier');return false;">
-            <i class="fa fa-shopping-cart"></i> <span>History Order</span>
-          </a>
+         
+
+          <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/history_tbl_pembelian_barang/?mulai=<?php echo date('Y-m-').'01'?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>','History Order');return false;">
+                <i class="fa fa-link"></i> <span>History Order </span>
+              </a>
         </li>
 
 
@@ -545,6 +568,14 @@
           if($this->session->userdata('level')=='3')
           {?>
 
+
+
+
+           <li>
+            <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/lap_penjualan_per_barang/?id_pelanggan=6&mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Transaksi Penjualan');return false;">
+              <i class="fa fa-link"></i> <span>Lap.Per Barang</span>
+            </a>
+          </li>
 
 
         <li>

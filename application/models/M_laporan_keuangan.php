@@ -246,7 +246,8 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 									a.kredit,
 									a.id_pelanggan,
 									a.id_group,
-									a.url_bukti
+									a.url_bukti,
+									a.id_referensi
 
 									FROM
 									(
@@ -354,6 +355,61 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 	}
 
 
+
+	public function m_detail_arus_kas_bank_cek($id_group,$tgl_awal,$tgl_akhir,$jenis_trx)
+	{
+		$id_cabang=$this->session->userdata('id_cabang');
+
+		if($jenis_trx=="")
+		{
+			$w="";
+		}else{
+			
+			$w = " AND a.jenis_trx='$jenis_trx' ";
+		}
+
+		$q = $this->db->query("
+							SELECT a.*,b.nama_admin,
+								IFNULL(a.debet,0)-IFNULL(a.kredit,0) AS saldo
+								FROM
+								(
+									SELECT
+									a.id ,
+									a.tanggal,
+								    a.nama AS group_trx,
+								    a.keterangan,
+									a.debet,
+									a.kredit,
+									a.id_group,
+									a.jenis_trx,
+									a.cek_bank,
+									a.url_bukti,
+									a.id_admin
+									FROM
+									(
+										SELECT a.*,
+										CASE WHEN a.jenis='masuk' THEN a.jumlah  END AS debet,
+										CASE WHEN a.jenis='keluar' THEN a.jumlah  END AS kredit
+										FROM 
+										(
+											SELECT a.*,DATE(a.tgl_update) AS tanggal,
+													b.nama,b.jenis
+												FROM `tbl_transaksi` a 
+												INNER JOIN tbl_group_transaksi b 
+											ON a.id_group=b.id
+											WHERE a.id_cabang='$id_cabang'
+										)a
+										WHERE (a.jumlah*1)<>0
+									)a 
+								)a
+							LEFT JOIN tbl_admin b ON a.id_admin=b.id_admin
+							WHERE (a.tanggal BETWEEN '$tgl_awal' AND '$tgl_akhir') AND a.id_group='$id_group' $w
+							ORDER BY a.id DESC
+						");
+		return $q->result();
+
+
+	}
 
 
 

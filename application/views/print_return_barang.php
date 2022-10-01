@@ -47,6 +47,8 @@ td {
               <th>Kondisi</th>                     
               <th>Gudang</th>                     
               <th>Keterangan</th>                     
+              <th>Kasir Lama</th>                     
+              <th>Kode TRX</th>                     
               <th>Tgl</th>                     
                                   
               
@@ -73,6 +75,8 @@ td {
                 <td>$x->kondisi</td>                
                 <td>$x->nama_gudang</td>                
                 <td>$x->ket</td>                
+                <td>$x->nama_admin_lama</td>                
+                <td>$x->group_trx_lama</td>                
                 <td>$x->tgl_trx</td>                
                 
               </tr>

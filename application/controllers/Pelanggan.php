@@ -223,6 +223,7 @@ class Pelanggan extends CI_Controller {
 		$serialize = $this->input->post();
 		$serialize['url_bukti'] = upload_file('url_bukti');
 		$id_pelanggan = $serialize['id_pelanggan'];
+		$serialize['id_admin'] = $this->session->userdata('id_admin');
 
 		//var_dump($serialize);
 		$xx = $this->db->query("SELECT saldo FROM tbl_pelanggan WHERE id_pelanggan='$id_pelanggan'");

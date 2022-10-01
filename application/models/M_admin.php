@@ -9,7 +9,33 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 			$this->load->helper('custom_func');
 		}
 
- 
+ 	
+	public function keuangan_harian($id_admin,$mulai,$selesai,$id_cabang)
+	{
+		$q = $this->db->query("
+				SELECT a.*,b.*
+					FROM tbl_keuangan_harian a 
+					LEFT JOIN tbl_admin b ON a.id_admin=b.id_admin
+
+				WHERE a.id_admin='$id_admin'
+				AND tanggal BETWEEN '$mulai' AND '$selesai' 
+				AND a.id_cabang='$id_cabang' 
+			");
+
+		return $q->result();
+	}
+
+
+	public function simpan_trx_keuangan($serialize)
+	{
+		$this->db->set($serialize);
+		$this->db->insert('tbl_keuangan_harian');
+		return $this->db->insert_id();
+	}
+
+
+
+
 	public function m_data_admin()
 	{
 		$q = $this->db->query("SELECT a.*,b.* FROM tbl_admin a LEFT JOIN tbl_cabang b ON a.id_cabang=b.id_cabang ");

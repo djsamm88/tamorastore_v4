@@ -21,12 +21,110 @@ class Admin extends CI_Controller {
 		
 	}
 
-
 	public function data_admin()
 	{
 		$data['all_admin'] = $this->m_admin->m_data_admin();	
 		$this->load->view('data_admin',$data);
 	}
+
+
+	public function keuangan_harian()
+	{
+		
+		$mulai = $this->input->get('mulai');
+		$selesai = $this->input->get('selesai');
+		$id_cabang = $this->input->get('id_cabang');		
+		$id_admin = $this->input->get('id_admin');		
+
+		if(!isset($id_admin))
+		{
+			$id_admin 	= $this->session->userdata('id_admin');	
+		}
+
+
+		if(!isset($id_cabang))
+		{
+			$id_cabang 	= $this->session->userdata('id_cabang');	
+		}
+
+		
+		$data['mulai'] = $mulai;
+		$data['selesai'] = $selesai;
+		$data['id_cabang'] = $id_cabang;
+		$data['id_admin'] = $id_admin;
+
+		
+
+		$data['all'] = $this->m_admin->keuangan_harian($id_admin,$mulai,$selesai,$id_cabang);	
+		
+		$this->load->view('keuangan_harian',$data);
+	}
+
+	public function keuangan_harian_pdf()
+	{
+
+		
+		$mulai = $this->input->get('mulai');
+		$selesai = $this->input->get('selesai');
+		$id_cabang = $this->input->get('id_cabang');		
+		$id_admin = $this->input->get('id_admin');	
+
+		$file = "lap_keuangan_harian-$mulai-$selesai.xls";
+		header("Content-type: application/octet-stream");
+		header("Content-Disposition: attachment; filename=$file");
+		header("Pragma: no-cache");
+		header("Expires: 0");	
+		
+
+		if(!isset($id_admin))
+		{
+			$id_admin 	= $this->session->userdata('id_admin');	
+		}
+
+
+		if(!isset($id_cabang))
+		{
+			$id_cabang 	= $this->session->userdata('id_cabang');	
+		}
+
+		
+		$data['mulai'] = $mulai;
+		$data['selesai'] = $selesai;
+		$data['id_cabang'] = $id_cabang;
+		$data['id_admin'] = $id_admin;
+
+		
+		
+		$data['all'] = $this->m_admin->keuangan_harian($id_admin,$mulai,$selesai,$id_cabang);	
+
+		$html = $this->load->view('keuangan_harian_pdf.php',$data);
+		
+		
+	}
+
+
+	
+
+
+
+
+	public function simpan_trx_keuangan()
+	{
+		$serialize = $this->input->post();
+		$serialize['url_bukti'] = upload_file('url_bukti');
+		$serialize['id_cabang'] = $this->session->userdata('id_cabang');
+		$serialize['id_admin'] = $this->session->userdata('id_admin');
+
+		$jumlah = hanya_nomor($serialize['jumlah']);		
+		$serialize['jumlah'] 		= hanya_nomor($serialize['jumlah']);
+		
+		$serialize['tanggal'] = date('Y-m-d H:i:s');
+		
+		$this->m_admin->simpan_trx_keuangan($serialize);
+
+
+	}
+
 
 	public function data_admin_by_id($id_admin)
 	{

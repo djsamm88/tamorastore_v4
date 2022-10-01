@@ -175,6 +175,9 @@ function go_beli(ini)
     var harga_retail = buang_titik(ini.parent().parent().find("#harga_retail").val());
     var harga_lusin = buang_titik(ini.parent().parent().find("#harga_lusin").val());
     var harga_koli = buang_titik(ini.parent().parent().find("#harga_koli").val());
+    var harga_partai = buang_titik(ini.parent().parent().find("#harga_partai").val());
+
+    
 
     var qty = buang_titik(ini.parent().parent().find("#qty").val());
     var id_barang  = ini.parent().parent().find("#id_barang").text();
@@ -225,6 +228,7 @@ function go_beli(ini)
                   harga_retail:harga_retail,
                   harga_lusin:harga_lusin,
                   harga_koli:harga_koli,
+                  harga_partai:harga_partai,
                   id_gudang:id_gudang,
                   id_barang_masuk:id_barang_masuk
                 };
