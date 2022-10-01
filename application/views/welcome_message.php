@@ -70,7 +70,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition skin-blue">
+<body class="hold-transition skin-yellow">
 <div class="wrapper">
 
   <!-- Main Header -->
