@@ -11,6 +11,29 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 
 
 
+	public function data_packing()
+	{
+		$q = "SELECT a.*,b.*,GROUP_CONCAT(a.grup_penjualan) AS grup_penjualan_coma 
+			FROM `tbl_packing` a 
+				LEFT JOIN tbl_pelanggan b 
+				ON a.id_pelanggan=b.id_pelanggan
+				GROUP BY grup_packing
+				ORDER BY a.tgl_update DESC
+			 ";
+		$qq = $this->db->query($q);
+
+		return $qq->result();
+	}
+
+
+
+	public function insert_packing($serialize)
+	{
+		$this->db->set($serialize);
+		$this->db->insert('tbl_packing');
+
+	}
+
 
 	public function m_lap_penjualan_per_barang($id_barang,$mulai,$selesai,$id_cabang='')
 	{	
@@ -40,6 +63,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 				a.transport_ke_ekspedisi,
 				a.id_pelanggan,
 				a.jumlah,
+				a.cara_bayar,
 				b.nama_admin,
 				b.email_admin 
 			FROM tbl_barang_transaksi a
@@ -171,6 +195,9 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 				a.tanggal,
 				a.id_barang,
 				a.nama_barang,
+				a.grup_penjualan,
+				a.group_trx,
+				a.nama_pembeli,
 				IFNULL(SUM(a.masuk),0) AS masuk,
 				IFNULL(SUM(a.keluar),0) AS keluar
 				FROM
@@ -179,6 +206,9 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 					a.tanggal,
 					a.id_barang,
 					a.nama_barang,
+					a.grup_penjualan,
+					a.group_trx,
+					a.nama_pembeli,
 					CASE WHEN a.jenis='masuk' THEN a.jumlah END AS masuk,
 					CASE WHEN a.jenis='keluar' THEN a.jumlah  END AS keluar
 					FROM 
@@ -188,6 +218,9 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 						a.id_barang,
 						a.nama_barang,
 						a.jenis,
+						a.grup_penjualan,
+						a.group_trx,
+						a.nama_pembeli,
 						SUM(a.jumlah) AS jumlah
 						FROM 
 						(
@@ -195,6 +228,9 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 						    a.id_barang,
 						    a.jumlah,
 						    a.jenis,
+						    a.grup_penjualan,
+						    a.group_trx,
+						    a.nama_pembeli,
 						    DATE(a.tgl_transaksi) AS tanggal,
 						    b.nama_barang
 						    FROM `tbl_barang_transaksi` a 
@@ -210,6 +246,10 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 				GROUP BY a.tanggal,a.id_barang
 				ORDER BY a.tanggal DESC
 			");
+
+
+		
+
 		return $q->result();
 	}
 
@@ -719,6 +759,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 				SELECT 
 				a.grup_penjualan,
 				SUM(a.sub_total_jual) AS total, 
+				SUM(a.jumlah) AS qty,
 				a.diskon,
 				a.saldo,				
 				a.nama_pembeli,
@@ -805,6 +846,42 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 				a.harga_ekspedisi,
 				a.transport_ke_ekspedisi,
 				a.id_pelanggan,
+				GROUP_CONCAT(a.satuan_jual) AS group_satuan,
+				b.nama_admin,
+				b.email_admin 
+			FROM tbl_barang_transaksi a
+			LEFT JOIN tbl_admin b ON a.id_admin=b.id_admin
+			WHERE a.jenis='keluar' AND (a.harga_beli <> 0 AND a.harga_jual <> 0) $where 
+				AND a.tgl_transaksi BETWEEN '$mulai' AND '$selesai' AND a.id_cabang='$id_cabang' AND a.id_pelanggan='$id_pelanggan'
+			GROUP BY grup_penjualan
+			ORDER BY tgl_transaksi DESC
+			");
+
+		return $q->result();
+	}
+
+
+	public function m_packing($id_pelanggan,$mulai,$selesai,$id_cabang)
+	{
+		$where="";
+		
+
+
+		$q = $this->db->query("
+				SELECT 
+				a.grup_penjualan,
+				SUM(a.sub_total_jual) AS total, 
+				a.diskon,
+				a.saldo,				
+				a.nama_pembeli,
+				a.hp_pembeli,
+				a.nama_packing,
+				a.tgl_transaksi,
+				a.tgl_trx_manual,
+				a.harga_ekspedisi,
+				a.transport_ke_ekspedisi,
+				a.id_pelanggan,
+				GROUP_CONCAT(a.satuan_jual) AS group_satuan,
 				b.nama_admin,
 				b.email_admin 
 			FROM tbl_barang_transaksi a

@@ -98,11 +98,12 @@
               <th>Kepada</th>                     
               <th>Sub Total</th>                     
               <th>Diskon</th>                     
-              <th>Ekspedisi</th>                     
-              <th>Transport Ke Ekspedisi</th>                     
+                          
               <th>Saldo</th>                     
               <th>Total</th>                     
+              
               <th>Qty</th>                     
+              <th>Jenis TRX</th>                     
               <th>Struk</th>                     
               
               
@@ -115,7 +116,7 @@
         $tot_qty=0;
         foreach($all as $x)
         {
-          $total = $x->total-$x->saldo-$x->diskon+($x->harga_ekspedisi+$x->transport_ke_ekspedisi);
+          $total = $x->total-$x->saldo-$x->diskon;
           $total_all+=$total;
           $tot_qty+=$x->jumlah;
           $no++;
@@ -130,11 +131,11 @@
                 <td>$x->nama_pembeli -[ $x->id_pelanggan ]</td>                
                 <td align=right>".rupiah($x->total)."</td>                
                 <td align=right>".rupiah($x->diskon)."</td>                
-                <td align=right>".rupiah($x->harga_ekspedisi)."</td>                
-                <td align=right>".rupiah($x->transport_ke_ekspedisi)."</td>                
                 <td align=right>".rupiah($x->saldo)."</td>                
                 <td align=right>".rupiah($total)."</td>                
+                
                 <td align=right>".rupiah($x->jumlah)."</td>                
+                <td align=right>$x->cara_bayar</td>                
                 <td><a href='".base_url()."index.php/barang/struk_penjualan/".$x->grup_penjualan."' target='blank'>Print</a></td>                                
               </tr>
           ");
@@ -146,7 +147,7 @@
       </tbody>
        <tfoot>
              <tr>
-                <th colspan='10' style='text-align:right'><b>Total</b></th>
+                <th colspan='8' style='text-align:right'><b>Total</b></th>
                 <th style='text-align:right'><b>Rp.<?php echo rupiah($total_all)?></b></th>
                 <th style='text-align:right'><b><?php echo rupiah($tot_qty)?></b></th>
              </tr>

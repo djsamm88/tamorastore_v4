@@ -184,7 +184,7 @@ if(isset($group_penjualan))
         </tr>
 
 
-
+        <!--
 
         <td colspan="7" align="right"><b>Biaya ke ekspedisi</b></td>
           <td  align="right" >
@@ -262,7 +262,7 @@ if(isset($group_penjualan))
           <td></td>
         </tr>
       <?php } ?>
-
+      -->
         <tr>
           <td colspan="7" align="right"><b>Total</b></td>
           <td id="t4_total" align="right" style="font-weight: bold;"></td><td></td>
@@ -286,6 +286,31 @@ if(isset($group_penjualan))
           <td></td>
         </tr>
 
+        <tr>
+          <td colspan="7" align="right"><b>Cara Bayar</b></td>
+          
+          <td  align="right" >
+           <select class="form-control" id="cara_bayar" name="cara_bayar">
+
+              <option value="cash">Cash</option>
+              <option value="hutang">Hutang</option>
+              <?php 
+                      $xxx = $this->m_bank->m_data();  
+                      foreach($xxx as $xx)
+                      {
+                        echo '<option value="'.$xx->nama_bank.'">'.$xx->nama_bank.'</option>';    
+                      }
+                    ?>
+
+            </select>
+        
+
+          </td>
+          <td></td>
+        </tr>
+
+
+
 
         
         <tr>
@@ -308,11 +333,14 @@ if(isset($group_penjualan))
         </tr>
 
 
-
+        <?php 
+          $q_config = $this->db->query("SELECT lama_return FROM tbl_config_kasir LIMIT 1");
+          $lama_return = $q_config->result()[0]->lama_return;
+        ?>
 
         <tr>
           <td colspan="7" align="right"><b>Lama Return</b></td>
-          <td  align="right" ><input id="lama_return" type="text" class="form-control nomor" name="lama_return" >
+          <td  align="right" ><input id="lama_return" type="text" class="form-control nomor" name="lama_return" value="<?php echo $lama_return?>">
           <small>Hari</small>
           </td>
           <td></td>
@@ -1029,7 +1057,7 @@ $("#penjualan_barang").on("submit",function(){
   if(confirm("Anda yakin selesai?"))
   {
 
-    $("#simpan").hide();
+    //$("#simpan").hide();
 
     /****** hapus dlu pending *******/
     $.get("<?php echo base_url()?>index.php/barang/hapus_pending/<?php echo $group_penjualan?>",function(){});
@@ -1044,7 +1072,7 @@ $("#penjualan_barang").on("submit",function(){
 
         console.log("<?php echo base_url()?>index.php/barang/struk_penjualan/"+x);
 
-        notif();   
+        //notif();   
     })
   
   }

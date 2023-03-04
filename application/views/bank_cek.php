@@ -42,11 +42,17 @@
 
                 <select class="form-control " name="jenis_trx" id="jenis_trx"  value="<?php echo $jenis_trx?>">
 
-                    <option>-- pilih Jenis </option>
+                    <option value="">-- pilih Jenis -- </option>
                     <option value="cash">Cash</option>
-                    <option value="MANDIRI">MANDIRI</option>
-                    <option value="BCA">BCA</option>
-                    <option value="BRI">BRI</option>
+                    <option value="hutang">Hutang</option>
+                    
+                    <?php 
+                      $xxx = $this->m_bank->m_data();  
+                      foreach($xxx as $xx)
+                      {
+                        echo '<option value="'.$xx->nama_bank.'">'.$xx->nama_bank.'</option>';    
+                      }
+                    ?>
                 </select>
                 <?php echo $jenis_trx?>
               </div>
@@ -100,6 +106,11 @@
                   $btn = "&radic; ";
                 }
 
+                if ($key->cara_bayar == 'hutang' || $key->cara_bayar == 'cash')
+                {
+                  $btn = "-"; 
+                }
+
 
                 
 
@@ -113,7 +124,7 @@
                     <td style='text-align:right'>".rupiah($key->debet)."</td>
                     <td style='text-align:right'>".rupiah($key->kredit)."</td>
                     <td style='text-align:right'>".rupiah($key->saldo)."</td>
-                    <td>$key->jenis_trx</td>
+                    <td>$key->cara_bayar</td>
                     <td>$key->nama_admin</td>
 
                     <td>$key->cek_bank

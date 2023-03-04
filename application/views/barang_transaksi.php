@@ -72,10 +72,13 @@
               <th>No</th>                    
               <th>Tanggal</th>                     
               <th>Barang</th>                     
+              <th>Grup Penjualan</th>                     
+              <th>Grup Pembelian</th>                     
               
-              <th>Masuk</th>                     
-            
+              <th>Masuk</th>                                 
+              <th>Suplier</th>                     
               <th>Keluar</th>                     
+              <th>Pelanggan</th>                     
               
               
         </tr>
@@ -92,14 +95,25 @@
                 $masuk = $x->masuk;
             } 
 
+            $q = $this->db->query("SELECT * FROM tbl_pembelian_barang WHERE group_trx = '$x->group_trx'");
+            $qq = $q->result();
+            $qqq = @$qq[0];
+
+            $nama_suplier = @$qqq->nama_suplier;
+
             echo (" 
               
               <tr>
                 <td>$no</td>                
                 <td>".tglindo($x->tanggal)."</td>
                 <td>$x->nama_barang</td>                
+                <td>$x->grup_penjualan</td>                
+                <td>$x->group_trx</td>                
                 <td>$masuk</td>                
+                <td>$nama_suplier</td>                
+
                 <td>$x->keluar</td>                                
+                <td>$x->nama_pembeli</td>                                
               </tr>
           ");
           

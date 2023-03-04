@@ -85,6 +85,7 @@
                 <td id='qty_awal'>$x->jumlah - $x->satuan <br>($jum pcs)</td>    
                          
                 <td class='warning'>
+                  <input class='form-control' name='group_trx' type='hidden' id='group_trx' value='$x->group_trx' >                  
                   <input class='form-control' name='qty' type='number' id='qty' value='$jum' >                  
                   <input class='form-control' name='qty_awal' type='number' id='qty_awalnya' value='$jum' readonly>                  
                   <input class='form-control' name='jum_satuan' type='number' id='jum_satuan' value='$jum_satuan' readonly>                  
@@ -210,6 +211,9 @@ function go_beli(ini)
   
     
     var qty = buang_titik(ini.parent().parent().find("#qty").val());
+    var group_trx = buang_titik(ini.parent().parent().find("#group_trx").val());
+
+
     var qty_awal = buang_titik(ini.parent().parent().find("#qty_awalnya").val());
     var jum_satuan = buang_titik(ini.parent().parent().find("#jum_satuan").val());
     var satuan = (ini.parent().parent().find("#satuan").val());
@@ -244,7 +248,7 @@ function go_beli(ini)
 
     if(confirm("Anda yakin?"))
     {
-      var ser = {id_barang:id_barang,qty:qty,id_gudang:id_gudang,qty_awal:qty_awal,jum_satuan:jum_satuan,satuan:satuan};
+      var ser = {id_barang:id_barang,qty:qty,group_trx:group_trx,id_gudang:id_gudang,qty_awal:qty_awal,jum_satuan:jum_satuan,satuan:satuan};
       $.post("<?php echo base_url()?>index.php/"+classnya+"/go_simpan_sementara",ser,function(x){
         console.log(x);        
         toastr["success"]("Barang telah ditambahkan.", "Sukses");

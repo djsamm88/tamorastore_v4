@@ -117,6 +117,7 @@ font-size:10px;
 			<td colspan=5 align=right>Diskon</td>
 			<td align=right><b>".rupiah($data[0]->diskon)."</b></td>
 		</tr>
+		<!--
 		<tr>
 			<td colspan=5 align=right>Ekspedisi [".$data[0]->nama_ekspedisi."] - [".strtoupper($data[0]->courier)."]</td>
 			<td align=right><b>".rupiah($data[0]->harga_ekspedisi)."</b></td>
@@ -125,6 +126,7 @@ font-size:10px;
 			<td colspan=5 align=right>Transport ke ekspedisi</td>
 			<td align=right><b>".rupiah($data[0]->transport_ke_ekspedisi)."</b></td>
 		</tr>
+		-->
 		<tr>
 			<td colspan=5 align=right>Total</td>
 			<td align=right><b>".rupiah($total)."</b></td>
@@ -137,6 +139,11 @@ font-size:10px;
 		<tr>
 			<td colspan=5 align=right>$utang_piutang</td>
 			<td align=right><b>" . rupiah($data[0]->bayar - $total) . "</b></td>
+		</tr>
+
+		<tr>
+			<td colspan=5 align=right>Jenis Pembayaran</td>
+			<td align=right><b>" . ($data[0]->cara_bayar) . "</b></td>
 		</tr>
 	";
 ?>

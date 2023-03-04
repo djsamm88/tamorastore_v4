@@ -17,6 +17,7 @@ class Laporan_keuangan extends CI_Controller {
 		//$this->load->library('datatables');
 		$this->load->model('m_laporan_keuangan');
 		$this->load->model('m_pelanggan');
+		$this->load->model('m_bank');
 
 
 	}
@@ -283,19 +284,24 @@ class Laporan_keuangan extends CI_Controller {
 
 
 
+
+ 
 	public function bank_cek()
 	{
 		$tgl_awal = $this->input->get('mulai');
 		$tgl_akhir = $this->input->get('selesai');
 		$jenis_trx = $this->input->get('jenis_trx');
 
-		$id_group = "18";
-		$data['all'] = $this->m_laporan_keuangan->m_detail_arus_kas_bank_cek($id_group,$tgl_awal,$tgl_akhir,$jenis_trx);
+		$id_group = "";
+		$data['all'] = $this->m_laporan_keuangan->m_detail_arus_kas_bank_cek_trx($id_group,$tgl_awal,$tgl_akhir,$jenis_trx);
 		$data['mulai'] = $tgl_awal;
 		$data['selesai'] = $tgl_akhir;
 		$data['jenis_trx'] = $jenis_trx;
 		$this->load->view('bank_cek',$data); 
 	}
+
+
+	
 
 	public function bank_cek_setujui($id)
 	{

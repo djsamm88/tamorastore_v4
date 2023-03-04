@@ -96,12 +96,8 @@
               <th>Tanggal</th>                                               
               <th>Kode Trx.</th>                     
               <th>Kepada</th>                     
-              <th>Satuan</th>                     
-              <th>Sub Total</th>                     
-              <th>Diskon</th>                                   
-              <th>Saldo</th>                     
-              <th>Total</th>                     
-              <th>Struk</th>                     
+              <th>Satuan</th>                                   
+              <th>Pilih</th>                     
               
               
         </tr>
@@ -122,15 +118,12 @@
                 <td>$no</td>                
                 <td>".($x->nama_admin)." <br>".($x->email_admin)."</td>
                 <td>".($x->tgl_transaksi)."</td>
-                <td>$x->grup_penjualan</td>                
+                <td>$x->grup_penjualan  <br><a href='".base_url()."index.php/barang/struk_penjualan/".$x->grup_penjualan."' target='blank'>detail</a></td>                
                 <td>$x->nama_pembeli -[ $x->id_pelanggan ]</td>    
                 <td>$x->group_satuan</td>                               
                             
-                <td align=right>".rupiah($x->total)."</td>                
-                <td align=right>".rupiah($x->diskon)."</td>                                
-                <td align=right>".rupiah($x->saldo)."</td>                
-                <td align=right>".rupiah($total)."</td>                
-                <td><a href='".base_url()."index.php/barang/struk_penjualan/".$x->grup_penjualan."' target='blank'>Print</a></td>                                
+                <td><input type='checkbox' name='array_gruup[]' value='$x->grup_penjualan'></td>
+
               </tr>
           ");
           
@@ -139,30 +132,86 @@
         
         ?>
       </tbody>
-       <tfoot>
-             <tr>
-                <th colspan='9' style='text-align:right'><b>Total</b></th>
-                <th style='text-align:right'><b>Rp.<?php echo rupiah($total_all)?></b></th>
-             </tr>
-           </tfoot>
+
   </table>
+  <div class="alert" style="text-align:right">
+    <button class="btn btn-primary" id="go_packing">Go Packing</button>
+  </div>
 </div>
 
 
         </div>
 
- <?php
-    if ($this->session->userdata('level') == '1') {
 
-    ?>
-        <input type="button" class="btn btn-primary" value="Download" id="download_pdf">
-        <?php } ?>
       </div>
       <!-- /.box -->
 
 </section>
     <!-- /.content -->
 
+
+
+
+
+
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Form Packing</h4>
+      </div>
+      <div class="modal-body">
+          <form id="form_tambah_packing">
+            <input type="hidden" name="id_pelanggan_form" id="id_pelanggan_form" class="form-control" readonly="readonly">            
+
+            <div class="col-sm-4">Nama Pelanggan</div>
+            <div class="col-sm-8"><input type="text" name="" id="nama_form" required="required" class="form-control" placeholder="nama_form"></div>
+            <div style="clear: both;"></div><br>
+        
+            <table class="table table-bordered" >
+              <thead>
+              <tr>
+                  <th width="10px">No.</th><th>Kode TRX</th>
+              </tr>
+            </thead>
+              <tbody id="t4_kode">
+
+              </tbody>
+            </table>
+          <input type="hidden" name="comma_kode_trx" id="comma_kode_trx"  class="form-control" placeholder="nama_form">
+
+            <div class="col-sm-4">Status packing</div>
+            <div class="col-sm-8">
+              <select name="status_packing" id="status_packing" required="required" class="form-control" placeholder="status_packing">
+                <option value="">--- Pilih --- </option>
+                <option value="belum">belum</option>
+                <option value="sudah">sudah</option>
+              </select>
+            </div>
+            <div style="clear: both;"></div><br>
+
+           <div class="col-sm-4">Keterangan</div>
+            <div class="col-sm-8"><textarea type="text" name="keterangan" id="keterangan" required="required" class="form-control" placeholder="keterangan"></textarea></div>
+            <div style="clear: both;"></div><br>
+
+            <div id="t4_info_form"></div>
+            <button type="submit" class="btn btn-primary"> Simpan </button>
+          </form>
+
+          <div style="clear: both;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 
 
@@ -176,6 +225,7 @@ $('.datepicker').datepicker({
 })
 
 
+
 $("#go_trx_jurnal").on("submit",function(){
     var mulai   = $("#mulai").val();
     var selesai  = $("#selesai").val();
@@ -187,9 +237,84 @@ $("#go_trx_jurnal").on("submit",function(){
       return false;
     }
 
-    eksekusi_controller('<?php echo base_url()?>index.php/barang/lap_penjualan_pelanggan/?id_pelanggan='+id_pelanggan+'&mulai='+mulai+'&selesai='+selesai+'&id_cabang='+id_cabang,'Laporan Penjualan');
+    eksekusi_controller('<?php echo base_url()?>index.php/barang/packing/?id_pelanggan='+id_pelanggan+'&mulai='+mulai+'&selesai='+selesai+'&id_cabang='+id_cabang,'Laporan Penjualan');
   return false;
 })
+
+
+
+
+$("#go_packing").on("click",function(e){
+  e.preventDefault();
+    var searchIDs = $("#tbl_datanya_barang input:checkbox:checked").map(function(){
+      return $(this).val();
+    }).get(); // <----
+    
+
+    var id_pelanggan = $("#id_pelanggan").val();
+    var nama = $( "#id_pelanggan option:selected" ).text();
+
+
+    $("#id_pelanggan_form").val(id_pelanggan);
+    $("#nama_form").val(nama);
+
+    $("#t4_kode").empty();
+    $("#comma_kode_trx").val("");
+    var comma_kode_trx_val = "";
+    var i=0;
+    $.each(searchIDs,function(a,b){
+      i++;
+      //console.log(b);
+      $("#t4_kode").append("<tr><td>"+i+"</td><td>"+b+"</tr>");
+      comma_kode_trx_val+=b+",";      
+
+    })
+
+    $("#comma_kode_trx").val(comma_kode_trx_val);
+
+    $("#myModal").modal('show');
+
+    /*
+    $.post("<?php echo base_url()?>index.php/barang/go_packing",{grup_penjualan_array:searchIDs},function(x){
+        console.log(x);
+    })
+    */
+})
+
+
+
+
+$("#form_tambah_packing").on("submit",function(){
+  
+  var ser = $(this).serialize();
+  
+  $.post("<?php echo base_url()?>index.php/barang/go_packing",ser,function(x){
+        console.log(x);
+
+        $("#t4_info_form").html("<div class='alert alert-success'>Berhasil.</div>").fadeIn().delay(3000).fadeOut();
+                  setTimeout(function(){
+                    $("#myModal").modal('hide');
+                  },3000);
+    })
+
+  return false
+})
+
+
+
+
+$("#myModal").on("hidden.bs.modal", function () {
+
+  var mulai   = $("#mulai").val();
+    var selesai  = $("#selesai").val();
+    var id_cabang  = $("#id_cabang").val();
+    var id_pelanggan  = $("#id_pelanggan").val();
+  eksekusi_controller('<?php echo base_url()?>index.php/barang/data_packing/?id_pelanggan='+id_pelanggan+'&mulai='+mulai+'&selesai='+selesai+'&id_cabang='+id_cabang,'History Packing');
+
+
+});
+
+
 
 
 
@@ -203,7 +328,7 @@ $("#download_pdf").on("click",function(){
 
 $(document).ready(function(){
 
-  //$('#tbl_datanya_barang').dataTable();
+  $('#tbl_datanya_barang').dataTable();
 
 });
 

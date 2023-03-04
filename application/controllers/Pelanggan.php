@@ -21,6 +21,8 @@ class Pelanggan extends CI_Controller {
 		$this->load->model('m_ambil');		
 		$this->load->model('m_ekspedisi');
 		$this->load->model('m_gudang');
+		$this->load->model('m_bank');
+		
 
 		
 	}

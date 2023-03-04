@@ -22,6 +22,8 @@ class Barang extends CI_Controller {
 		$this->load->model('m_gudang');
 		$this->load->model('m_cabang');
 		$this->load->model('m_admin');
+		$this->load->model('m_bank');
+
 
 	}
 
@@ -156,9 +158,9 @@ class Barang extends CI_Controller {
 			$serialize['saldo'] 		= hanya_nomor($data['saldo']);
 
 			$serialize['bayar'] 		= hanya_nomor($data['bayar']);
-			$serialize['transport_ke_ekspedisi'] = hanya_nomor($data['transport_ke_ekspedisi']);
-			$serialize['harga_ekspedisi'] 		 = hanya_nomor($data['harga_ekspedisi']);
-			$serialize['nama_ekspedisi'] 		 = ($data['nama_ekspedisi']);
+			$serialize['transport_ke_ekspedisi'] = @hanya_nomor($data['transport_ke_ekspedisi']);
+			$serialize['harga_ekspedisi'] 		 = @hanya_nomor($data['harga_ekspedisi']);
+			$serialize['nama_ekspedisi'] 		 = @($data['nama_ekspedisi']);
 			
 			$serialize['sub_total_jual']= $serialize['harga_jual']*$data['jumlah'][$key];
 			$serialize['sub_total_beli']= $barang->harga_pokok*$data['jumlah'][$key];
@@ -227,7 +229,7 @@ class Barang extends CI_Controller {
 	{
 		$id_cabang = $this->session->userdata('id_cabang');
 		$data = $this->input->post();
-		$data['alamat'] = $data['alamat_lengkap']." - ".$data['alamat'];
+		$data['alamat'] = @$data['alamat_lengkap']." - ".@$data['alamat'];
 
 		
 		unset($data['alamat_lengkap']);
@@ -257,11 +259,14 @@ class Barang extends CI_Controller {
 		$total_harga_beli 	=0; 
 		$id_barang = $data['id_barang'];
 
+		$id_barang_koma = "";
 		for($i=0;$i<count($id_barang);$i++) {
 			//$data['harga_jual'] as $key => $harga_jual
 			$key=$i;
 			$id = $id_barang[$i];
 			$harga_jual = $data['harga_jual'][$i];
+
+			$id_barang_koma = $id_barang_koma.",".$id;
 			# code...
 			//echo $key;
 			/********** mengambil detail barang dari db***********/
@@ -289,7 +294,7 @@ class Barang extends CI_Controller {
 			$serialize['saldo'] 		= hanya_nomor($data['saldo']);
 
 			$serialize['bayar'] 		= hanya_nomor($data['bayar']);
-			$serialize['transport_ke_ekspedisi'] = hanya_nomor($data['transport_ke_ekspedisi']);			
+			$serialize['transport_ke_ekspedisi'] = hanya_nomor(@$data['transport_ke_ekspedisi']);			
 			
 			
 			$serialize['sub_total_jual']= $serialize['harga_jual']*$data['jumlah'][$key];
@@ -300,9 +305,9 @@ class Barang extends CI_Controller {
 			$serialize['id_gudang']		= '1';
 
 
-			$serialize['harga_ekspedisi']		= hanya_nomor($data['harga_ekspedisi']);
-			$serialize['nama_ekspedisi']		= $data['nama_ekspedisi'];
-			$serialize['alamat']				= $data['alamat'];
+			$serialize['harga_ekspedisi']		= hanya_nomor(@$data['harga_ekspedisi']);
+			$serialize['nama_ekspedisi']		= @$data['nama_ekspedisi'];
+			$serialize['alamat']				= @$data['alamat'];
 			
 			$serialize['province_id']		= @$data['province_id'];
 			$serialize['city_id']			= @$data['city_id'];
@@ -311,6 +316,7 @@ class Barang extends CI_Controller {
 			$serialize['service']			= @$data['service'];
 			$serialize['berat_total']		= hanya_nomor($data['total_berat']);
 			
+			$serialize['cara_bayar']			= @$data['cara_bayar'];
 			
 
 
@@ -329,16 +335,15 @@ class Barang extends CI_Controller {
 		}
 
 
-		
+		$this->db->query("UPDATE tbl_config_kasir SET lama_return='".$data['lama_return']."'");
 
-		$serialize['transport_ke_ekspedisi'] = hanya_nomor($data['transport_ke_ekspedisi']);
-		$serialize['harga_ekspedisi'] 		 = hanya_nomor($data['harga_ekspedisi']);
+		$serialize['transport_ke_ekspedisi'] = hanya_nomor(@$data['transport_ke_ekspedisi']);
+		$serialize['harga_ekspedisi'] 		 = hanya_nomor(@$data['harga_ekspedisi']);
 
 		/*********** insert ke transaksi **************/	
 		$ket = "Kpd: [".$data['nama_pembeli']."] - Kode TRX:[".$data['grup_penjualan']."] 				
 				diskon:[".$data['diskon']."] 
-				harga_ekspedisi:[".$serialize['harga_ekspedisi']."] 
-				transport_ke_ekspedisi:[".$data['transport_ke_ekspedisi']."] 
+
 
 				<br>
 				- Jumlah:[".rupiah($total_tanpa_diskon)."] <br>
@@ -346,6 +351,14 @@ class Barang extends CI_Controller {
 				- Bayar :".rupiah(hanya_nomor($data['bayar']))."<br>
 
 				".$data['keterangan'];
+
+
+				if(is_numeric($data['cara_bayar'])==1)
+				{
+					$id_bank=$data['cara_bayar'];
+				}else{
+					$id_bank=0;
+				}
 
 		$ser_trx = array(
 						"id_group"		=> "8",							
@@ -357,7 +370,13 @@ class Barang extends CI_Controller {
 						"transport_ke_ekspedisi"	=> $serialize['transport_ke_ekspedisi'],
 						"id_referensi"	=> $data['grup_penjualan'],
 						"id_pelanggan"	=> $id_pelanggan,
-						"id_cabang"		=> $id_cabang
+						"id_cabang"		=> $id_cabang,
+						"id_barang_koma"		=> $id_barang_koma,
+						"cara_bayar"		=> $data['cara_bayar'],
+						"id_bank"		=> $id_bank,
+						"hutang"		=> hanya_nomor($total_tanpa_diskon-hanya_nomor('diskon'))-hanya_nomor($data['bayar']),
+						"jumlah_bayar"		=> hanya_nomor($data['bayar'])
+
 					);				
 		/* untuk id_referensi = id_group/id_table*/				
 		$this->db->set($ser_trx);
@@ -1370,6 +1389,7 @@ class Barang extends CI_Controller {
 		$data['id_cabang'] = $id_cabang;
 
 		$data['all'] = $this->m_barang->m_lap_penjualan($mulai,$selesai,$id_admin,$id_cabang);	
+		
 		$this->load->view('lap_penjualan',$data);
 	}
 
@@ -1423,6 +1443,67 @@ class Barang extends CI_Controller {
 
 	}
 
+
+	public function packing()
+	{
+		$mulai = $this->input->get('mulai');
+		$selesai = $this->input->get('selesai');
+		$id_cabang = $this->input->get('id_cabang');
+		$id_pelanggan = $this->input->get('id_pelanggan');
+
+		$id_admin 	= $this->session->userdata('id_admin');
+		$level 		= $this->session->userdata('level');
+
+
+		$data['mulai'] = $mulai;
+		$data['selesai'] = $selesai;
+		$data['id_cabang'] = $id_cabang;
+		$data['id_pelanggan'] = $id_pelanggan;
+
+		$data['pelanggan'] = $this->m_pelanggan->m_data();
+
+		$data['all'] = $this->m_barang->m_packing($id_pelanggan,$mulai,$selesai,$id_cabang);	
+		$this->load->view('packing',$data);
+	}
+
+
+	public function go_packing()
+	{
+		$data = $this->input->post();
+
+		//var_dump($data);
+		$data['comma_kode_trx'] = rtrim($data['comma_kode_trx'], ',');
+		//var_dump($data);
+		$xx = $data['comma_kode_trx'];
+		unset($data['comma_kode_trx']);
+		$data['id_pelanggan']=$data['id_pelanggan_form'];
+		unset($data['id_pelanggan_form']);
+
+		$data['grup_packing'] = date('ymdHis')."_".$this->session->userdata('id_admin');
+
+		$xxx = explode(",",$xx);
+
+		for($i=0;$i<count($xxx);$i++)
+		{
+			$data['grup_penjualan'] = $xxx[$i];
+			$this->m_barang->insert_packing($data);
+		}
+
+	}
+
+
+	public function data_packing()
+	{
+		
+		$data['all'] = $this->m_barang->data_packing();	
+		$this->load->view('data_packing',$data);
+	}
+
+
+	public function go_update_status($id)
+	{
+		$this->db->query("UPDATE tbl_packing SET status_packing='sudah' WHERE id='$id'");
+	}
 
 	public function lap_penjualan_pelanggan()
 	{
@@ -1726,6 +1807,8 @@ class Barang extends CI_Controller {
 		$harga_koli = $this->input->post('harga_koli');
 		$harga_partai = $this->input->post('harga_partai');
 
+		$group_trx = $this->input->post('group_trx');
+
 		$id_barang = $this->input->post('id_barang');
 		$id_gudang = $this->input->post('id_gudang');
 		$id_cabang = $this->session->userdata('id_cabang');
@@ -1741,6 +1824,7 @@ class Barang extends CI_Controller {
 								harga_beli='$harga_beli',
 								id_barang='$id_barang',
 								id_gudang='$id_gudang',
+								group_trx='$group_trx',
 								id_cabang='$id_cabang'
 							");			
 		

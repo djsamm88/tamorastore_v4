@@ -132,9 +132,14 @@
             <div class="col-sm-8">
               <select class="form-control" name="jenis_trx" id="jenis_trx">
                 <option value="cash">Cash</option>
-                <option value="MANDIRI">MANDIRI</option>
-                <option value="BCA">BCA</option>
-                <option value="BRI">BRI</option>
+                
+                    <?php 
+                      $xxx = $this->m_bank->m_data();  
+                      foreach($xxx as $xx)
+                      {
+                        echo '<option value="'.$xx->nama_bank.'">'.$xx->nama_bank.'</option>';    
+                      }
+                    ?>
               </select>
             </div>
             </div>

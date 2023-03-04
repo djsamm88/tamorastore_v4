@@ -30,6 +30,16 @@
             </li>
 
 
+
+             <li>
+              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/bank/data/?mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Data Bank');return false;">
+                <i class="fa fa-link"></i> <span>Data Bank</span>
+              </a>
+            </li>
+
+            
+
+
  
         <?php 
         if($this->session->userdata('level')=='1')
@@ -171,12 +181,6 @@
             </li>
 
 
-             <li>
-              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/lap_penjualan','Transaksi Penjualan');return false;">
-                <i class="fa fa-link"></i> <span>Lap.Penjualan</span>
-              </a>
-            </li>
-
 
 
            <li>
@@ -251,6 +255,23 @@
               <i class="fa fa-link"></i> <span>Penjualan Member</span>
             </a>
           </li>
+
+
+
+           <li>
+            <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/packing/?id_pelanggan=6&mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Transaksi Penjualan');return false;">
+              <i class="fa fa-link"></i> <span>Packing</span>
+            </a>
+          </li>
+
+
+           <li>
+            <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/data_packing/?id_pelanggan=6&mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Transaksi Penjualan');return false;">
+              <i class="fa fa-link"></i> <span>History Packing</span>
+            </a>
+          </li>
+
+
 
 
            <li>
@@ -861,6 +882,33 @@
 
 
 
+
+
+
+
+        
+        <?php }?>
+
+
+
+
+        <?php 
+          //packing
+          if($this->session->userdata('level')=='8')
+          {?>
+             
+           <li>
+            <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/packing/?id_pelanggan=6&mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Transaksi Penjualan');return false;">
+              <i class="fa fa-link"></i> <span>Packing</span>
+            </a>
+          </li>
+
+
+           <li>
+            <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/data_packing/?id_pelanggan=6&mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Transaksi Penjualan');return false;">
+              <i class="fa fa-link"></i> <span>History Packing</span>
+            </a>
+          </li>
 
 
 

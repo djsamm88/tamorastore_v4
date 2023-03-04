@@ -75,8 +75,8 @@
               <th>Kepada</th>                     
               <th>Sub Total</th>                     
               <th>Diskon</th>                     
-              <th>Ekspedisi</th>                     
-              <th>Transport Ke Ekspedisi</th>                     
+              <th>Qty</th>                     
+                               
               <th>Saldo</th>                     
               <th>Total</th>                     
               <th>Bayar</th>                     
@@ -114,8 +114,7 @@
                 <td>$x->nama_pembeli -[ $x->id_pelanggan ]</td>                
                 <td align=right>".rupiah($x->total)."</td>                
                 <td align=right>".rupiah($x->diskon)."</td>                
-                <td align=right>".rupiah($x->harga_ekspedisi)."</td>                
-                <td align=right>".rupiah($x->transport_ke_ekspedisi)."</td>                
+                <td align=right>".rupiah($x->qty)."</td>                
                 <td align=right>".rupiah($x->saldo)."</td>                
                 <td align=right>".rupiah($total)."</td>                
                 <td align=right>".rupiah($x->bayar)."</td>                
@@ -132,7 +131,7 @@
       </tbody>
        <tfoot>
              <tr>
-                <th colspan='10' style='text-align:right'><b>Total</b></th>
+                <th colspan='9' style='text-align:right'><b>Total</b></th>
                 <th style='text-align:right'><b>Rp.<?php echo rupiah($total_all)?></b></th>
                 
 

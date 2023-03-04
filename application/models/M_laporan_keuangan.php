@@ -356,7 +356,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 
 
 
-	public function m_detail_arus_kas_bank_cek($id_group,$tgl_awal,$tgl_akhir,$jenis_trx)
+	public function m_detail_arus_kas_bank_cek_trx($id_group,$tgl_awal,$tgl_akhir,$jenis_trx)
 	{
 		$id_cabang=$this->session->userdata('id_cabang');
 
@@ -365,10 +365,18 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 			$w="";
 		}else{
 			
-			$w = " AND a.jenis_trx='$jenis_trx' ";
+			$w = " AND a.cara_bayar='$jenis_trx'";
 		}
 
-		$q = $this->db->query("
+		if($id_group=="")
+		{
+			$g ="";
+		}else {
+			$g = " AND a.id_group  ='$id_group' ";
+		}
+
+
+		$query = "
 							SELECT a.*,b.nama_admin,
 								IFNULL(a.debet,0)-IFNULL(a.kredit,0) AS saldo
 								FROM
@@ -384,6 +392,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 									a.jenis_trx,
 									a.cek_bank,
 									a.url_bukti,
+									a.cara_bayar,
 									a.id_admin
 									FROM
 									(
@@ -403,9 +412,17 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 									)a 
 								)a
 							LEFT JOIN tbl_admin b ON a.id_admin=b.id_admin
-							WHERE (a.tanggal BETWEEN '$tgl_awal' AND '$tgl_akhir') AND a.id_group='$id_group' $w
+							WHERE (a.tanggal BETWEEN '$tgl_awal' AND '$tgl_akhir') $g  $w
+
+							AND (
+							                a.id_group = '8' OR  a.id_group = '18' 
+							            )
+
 							ORDER BY a.id DESC
-						");
+						";
+
+			//echo $query;
+		$q = $this->db->query($query);
 		return $q->result();
 
 

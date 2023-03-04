@@ -67,7 +67,9 @@
                 <td id='harga_awal'>".rupiah($x->harga_pokok)."</td>    
 
                 <td class=''>
+                  <input class='' type='hidden' name='group_trx' value='$x->group_trx' id='group_trx'>
                   <input class='form-control nomor' name='harga_beli' value='$x->harga_pokok' id='harga_beli'>
+
                 </td>  
 
                  <td class=''>                  
@@ -172,6 +174,9 @@ function go_beli(ini)
     var qty_awal    = buang_titik(ini.parent().parent().find("#qty_awal").text());
 
     var harga_beli = buang_titik(ini.parent().parent().find("#harga_beli").val());
+    var group_trx = buang_titik(ini.parent().parent().find("#group_trx").val());
+
+
     var harga_retail = buang_titik(ini.parent().parent().find("#harga_retail").val());
     var harga_lusin = buang_titik(ini.parent().parent().find("#harga_lusin").val());
     var harga_koli = buang_titik(ini.parent().parent().find("#harga_koli").val());
@@ -230,7 +235,8 @@ function go_beli(ini)
                   harga_koli:harga_koli,
                   harga_partai:harga_partai,
                   id_gudang:id_gudang,
-                  id_barang_masuk:id_barang_masuk
+                  id_barang_masuk:id_barang_masuk,
+                  group_trx:group_trx
                 };
       console.log(ser);
       
