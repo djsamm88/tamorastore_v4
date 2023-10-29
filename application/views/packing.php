@@ -199,6 +199,19 @@
             <div class="col-sm-8"><textarea type="text" name="keterangan" id="keterangan" required="required" class="form-control" placeholder="keterangan"></textarea></div>
             <div style="clear: both;"></div><br>
 
+
+
+
+            <div class="col-sm-4 judul">foto_packing </div>
+            <div class="col-sm-8">
+              <input class="form-control" name="foto_packing" id="foto_packing" type="file" accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps">
+            </div>
+            <div style="clear:both"></div>
+            <br>
+
+
+
+
             <div id="t4_info_form"></div>
             <button type="submit" class="btn btn-primary"> Simpan </button>
           </form>
@@ -282,10 +295,12 @@ $("#go_packing").on("click",function(e){
 })
 
 
-
+ 
 
 $("#form_tambah_packing").on("submit",function(){
   
+  /*
+
   var ser = $(this).serialize();
   
   $.post("<?php echo base_url()?>index.php/barang/go_packing",ser,function(x){
@@ -296,6 +311,32 @@ $("#form_tambah_packing").on("submit",function(){
                     $("#myModal").modal('hide');
                   },3000);
     })
+
+    */
+
+
+  $.ajax({
+            url: "<?php echo base_url()?>index.php/barang/go_packing",
+            type: "POST",
+            contentType: false,
+            processData:false,
+            data:  new FormData(this),
+            beforeSend: function(){
+                //alert("sedang uploading...");
+            },
+            success: function(e){
+                console.log(e);
+                
+                $("#t4_info_form").html("<div class='alert alert-success'>Sukses! "+e+"</div>");
+                $("#btn_simpan").hide();
+                setTimeout(function(){
+                    $("#myModal").modal('hide');
+                  },3000);
+            },
+            error: function(er){
+                $("#info").html("<div class='alert alert-warning'>Ada masalah! "+er+"</div>");
+            }           
+       });
 
   return false
 })

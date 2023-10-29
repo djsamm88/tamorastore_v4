@@ -40,7 +40,7 @@
                 <select name="id_pelanggan" id="id_pelanggan" class="form-control select2" >
                   <option value=""> --- pilih Pelanggan --- </option>
                   <?php 
-                    
+                     
                     foreach($pelanggan as $pel)
                     {
                       if($pel->id_pelanggan==$id_pelanggan)
@@ -203,7 +203,7 @@ $("#download_pdf").on("click",function(){
 
 $(document).ready(function(){
 
-  //$('#tbl_datanya_barang').dataTable();
+  $('#tbl_datanya_barang').dataTable();
 
 });
 

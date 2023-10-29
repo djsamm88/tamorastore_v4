@@ -271,7 +271,7 @@ if(isset($group_penjualan))
         <tr>
           <td colspan="7" align="right"><b>Bayar</b></td>
           <td  align="right" >
-          <input id="t4_bayar" type="text"  class="form-control nomor" name="bayar" value="" required style="text-align:right;">
+          <input id="t4_bayar" type="text"  class="form-control nomor" name="bayar" value="" required style="text-align:right;" autocomplete="off">
           </td>
           <td></td>
         </tr>

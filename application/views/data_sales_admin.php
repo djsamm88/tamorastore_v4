@@ -27,7 +27,8 @@
           </div>
         </div>
         <div class="box-body">
-              
+
+<form id="bayar_selectif_sales">              
 <div class="table-responsive">
 <table id="tbl_datanya" class="table  table-striped table-bordered"  cellspacing="0" width="100%">
       <thead>
@@ -43,7 +44,7 @@
               <th>Tgl Trx</th>                     
               <th>Status Bayar</th>                     
               <th>Tgl Bayar</th>                     
-              <th>Action</th>                     
+              <th>Pilih</th>                     
               
               
         </tr>
@@ -58,8 +59,13 @@
           if($x->status_bayar=='pending')
           {
             $btn = "<button class='btn btn-warning btn-xs btn-block' onclick='btn_bayar($x->id)'>Bayar</button>";
+            $c = "<input type='checkbox' id='bayar_sales' name='bayar_sales[]' value='$x->id' />";
+            $c.= "<input type='hidden'  name='hasil_sales[]' value='$x->hasil_sales' />";
+            $c.= "<input type='hidden'  name='grup_penjualan[]' value='$x->grup_penjualan' />";
+
           }else{
             $btn="-";
+            $c = "";
           }
           
 
@@ -76,7 +82,7 @@
                 <td>$x->tgl</td>
                 <td>$x->status_bayar</td>                
                 <td>$x->tgl_bayar</td>
-                <td>$btn</td>
+                <td>$c</td>
                 
               </tr>
           
@@ -90,6 +96,10 @@
   </table>
 </div>
 
+<div style="text-align:right;">
+<button type="submit" class="btn btn-primary"> Bayar </button>
+</div>
+</form>
 
         </div>
         
@@ -136,9 +146,29 @@
 <script>
 console.log("<?php echo $this->router->fetch_class();?>");
 var classnya = "<?php echo $this->router->fetch_class();?>";
-
-
 hanya_nomor(".nomor");
+
+
+$("#bayar_selectif_sales").on("submit",function(){
+  
+  if(confirm("Anda yakin membayar?"))
+  {
+
+    $.post("<?php echo base_url()?>index.php/barang/bayar_sales",$("#bayar_selectif_sales").serialize(),function(x){
+
+        window.open("<?php echo base_url()?>index.php/barang/struk_pembayaran_sales/?"+$("#bayar_selectif_sales").serialize());
+        eksekusi_controller('<?php echo base_url()?>index.php/barang/data_sales_admin','Trx Sales Hasil');
+    })
+    
+
+  }
+
+
+  return false;
+})
+
+
+
 function btn_bayar(id)
 {
   if(confirm("Anda yakin membayar Sales ini?"))
@@ -241,7 +271,9 @@ $("#myModal").on("hidden.bs.modal", function () {
 
 $(document).ready(function(){
 
-  $('#tbl_datanya').dataTable();
+  $('#tbl_datanya').dataTable({
+    "iDisplayLength": 50
+});
 
 });
 $("#judul2").html("DataTable "+document.title);

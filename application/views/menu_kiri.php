@@ -6,38 +6,12 @@
         </li>
 
             
-        
-           <li>
-            <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/admin/keuangan_harian/?mulai=<?php echo date( 'Y-m-d')?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>','Keuangan Harian');return false;">
-              <i class="fa fa-link"></i> <span>Keuangan Harian</span>
-            </a>
-          </li>
-
-
             <li>
               <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/barang_transaksi/?mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Transaksi Barang');return false;">
                 <i class="fa fa-link"></i> <span>Lap.Transaksi</span>
               </a>
             </li>
 
-
-
-
-             <li>
-              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/laporan_keuangan/bank_cek/?mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Transaksi Barang');return false;">
-                <i class="fa fa-link"></i> <span>Bank Cek</span>
-              </a>
-            </li>
-
-
-
-             <li>
-              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/bank/data/?mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Data Bank');return false;">
-                <i class="fa fa-link"></i> <span>Data Bank</span>
-              </a>
-            </li>
-
-            
 
 
  
@@ -60,6 +34,33 @@
         </li>
 
 
+
+
+            
+        
+           <li>
+            <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/admin/keuangan_harian/?mulai=<?php echo date( 'Y-m-d')?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>','Keuangan Harian');return false;">
+              <i class="fa fa-link"></i> <span>Keuangan Harian</span>
+            </a>
+          </li>
+
+
+
+             <li>
+              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/laporan_keuangan/bank_cek/?mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Transaksi Barang');return false;">
+                <i class="fa fa-link"></i> <span>Bank Cek</span>
+              </a>
+            </li>
+
+
+
+             <li>
+              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/bank/data/?mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Data Bank');return false;">
+                <i class="fa fa-link"></i> <span>Data Bank</span>
+              </a>
+            </li>
+
+            
 
 
         
@@ -182,7 +183,6 @@
 
 
 
-
            <li>
             <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/lap_penjualan/?mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Transaksi Penjualan');return false;">
               <i class="fa fa-link"></i> <span>Lap.Penjualan</span>
@@ -205,7 +205,7 @@
 
 
             <li>
-              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/return_barang','Return Barang');return false;">
+              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/return_barang?mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Return Barang');return false;">
                 <i class="fa fa-link"></i> <span>Return Barang</span>
               </a>
             </li>
@@ -361,18 +361,7 @@
               </a>
             </li>
             
-            <li>
-              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/stok_gudang/?id_gudang=1&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Stok Gudang');return false;">
-                <i class="fa fa-link"></i> <span>Stok Gudang <span class="label label-warning pull-right badge_gudang"></span></span></span>
-              </a>
-            </li>
-
-
-            <li>
-              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/log_pindah_gudang/?mulai=<?php echo date('Y-m-').'01'?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>','Log Gudang');return false;">
-                <i class="fa fa-link"></i> <span>Log Perpindahan </span>
-              </a>
-            </li>
+           
 
             
             
@@ -591,6 +580,32 @@
 
 
 
+        
+           <li>
+            <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/admin/keuangan_harian/?mulai=<?php echo date( 'Y-m-d')?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>','Keuangan Harian');return false;">
+              <i class="fa fa-link"></i> <span>Keuangan Harian</span>
+            </a>
+          </li>
+
+
+
+             <li>
+              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/laporan_keuangan/bank_cek/?mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Transaksi Barang');return false;">
+                <i class="fa fa-link"></i> <span>Bank Cek</span>
+              </a>
+            </li>
+
+
+
+             <li>
+              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/bank/data/?mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Data Bank');return false;">
+                <i class="fa fa-link"></i> <span>Data Bank</span>
+              </a>
+            </li>
+
+            
+
+
 
            <li>
             <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/lap_penjualan_per_barang/?id_pelanggan=6&mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Transaksi Penjualan');return false;">
@@ -626,7 +641,7 @@
 
             
             <li>
-              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/return_barang','Return Barang');return false;">
+              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/return_barang?mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Return Barang');return false;">
                 <i class="fa fa-link"></i> <span>Return Barang</span>
               </a>
             </li>
@@ -634,7 +649,7 @@
 
 
          <li>
-          <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/lap_penjualan/?mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>','Transaksi Penjualan');return false;">
+          <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/lap_penjualan/?mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Transaksi Penjualan');return false;">
             <i class="fa fa-link"></i> <span>Lap.Penjualan</span>
           </a>
         </li>
@@ -663,6 +678,13 @@
 
 
 
+
+           <li>
+            <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/data_packing/?id_pelanggan=6&mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Transaksi Penjualan');return false;">
+              <i class="fa fa-link"></i> <span>History Packing</span>
+            </a>
+          </li>
+
         
 
         <?php }?>
@@ -672,7 +694,8 @@
 
 
         <?php 
-          if($this->session->userdata('level')=='4')
+        //gudang
+          if($this->session->userdata('level')=='4')            
           {?>
 
 
@@ -764,6 +787,37 @@
           //customer service
           if($this->session->userdata('level')=='6')
           {?>
+
+
+            
+        
+           <li>
+            <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/admin/keuangan_harian/?mulai=<?php echo date( 'Y-m-d')?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>','Keuangan Harian');return false;">
+              <i class="fa fa-link"></i> <span>Keuangan Harian</span>
+            </a>
+          </li>
+
+
+
+             <li>
+              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/laporan_keuangan/bank_cek/?mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Transaksi Barang');return false;">
+                <i class="fa fa-link"></i> <span>Bank Cek</span>
+              </a>
+            </li>
+
+
+
+             <li>
+              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/bank/data/?mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Data Bank');return false;">
+                <i class="fa fa-link"></i> <span>Data Bank</span>
+              </a>
+            </li>
+
+            
+
+
+
+            
              <li>
               <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/data','Master Barang');return false;">
                 <i class="fa fa-link"></i> <span>Data Barang</span>
@@ -782,7 +836,7 @@
           </a>
             <ul class="treeview-menu">
             <li>
-              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/return_barang','Return Barang');return false;">
+              <a href="#" onclick="eksekusi_controller('<?php echo base_url()?>index.php/barang/return_barang?mulai=<?php echo date( 'Y-m-d', strtotime(' -1 day' ))?>&selesai=<?php echo date('Y-m-d',strtotime('+1 days'));?>&id_cabang=<?php echo $this->session->userdata('id_cabang')?>','Return Barang');return false;">
                 <i class="fa fa-link"></i> <span>Return Barang</span>
               </a>
             </li>

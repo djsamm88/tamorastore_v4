@@ -264,6 +264,9 @@ $("#form_trx").on("submit",function(){
                 
                 $("#t4_info_form").html("<div class='alert alert-success'>Sukses! "+e+"</div>");
                 $("#btn_simpan").hide();
+                setTimeout(function(){
+                    $("#myModal").modal('hide');
+                  },3000);
             },
             error: function(er){
                 $("#info").html("<div class='alert alert-warning'>Ada masalah! "+er+"</div>");

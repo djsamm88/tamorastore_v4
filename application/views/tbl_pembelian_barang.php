@@ -307,10 +307,17 @@ $("#download_pdf").on("click",function(){
 
 $(document).ready(function(){
 
-  //$('#tbl_datanya_barang').dataTable();
+  $('#tbl_datanya_barang').dataTable();
 
 });
 $("#judul2").html("DataTable "+document.title);
+
+
+$(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2()
+
+})
 
 $("#myModal").on("hidden.bs.modal", function () {
   eksekusi_controller('<?php echo base_url()?>index.php/barang/tbl_pembelian_barang',document.title);

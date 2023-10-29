@@ -38,6 +38,8 @@
 
               <div class="col-sm-3">
                 <select name="id_cabang" id="id_cabang" class="form-control">
+                  <!--
+
                   <option value=""> --- pilih Cabang --- </option>
                   <?php 
                     $data_cabang = $this->m_cabang->m_data_cabang();
@@ -53,11 +55,13 @@
                         <option value='$cabang->id_cabang' $sel>$cabang->kode_cabang - $cabang->nama_cabang</option>
                       ";
                     }
-                  ?>                  
+                  ?>              
+                  -->    
               </select>
               </div>
               <div class="col-sm-3">
                 <select name="id_admin" id="id_admin" class="form-control">
+                  <!--
                   <option value=""> --- pilih Admin --- </option>
                   <?php 
                     $data_admin = $this->m_admin->m_data_admin();
@@ -73,7 +77,8 @@
                         <option value='$adm->id_admin' $sela>$adm->nama_admin - $adm->id_admin</option>
                       ";
                     }
-                  ?>                  
+                  ?> 
+                  -->                 
               </select>
               </div>
               <div class="col-sm-2">
@@ -196,7 +201,7 @@
 
             <div class="col-sm-4 judul">Jumlah</div>
             <div class="col-sm-8">
-              <input class="form-control nomor" name="jumlah" id="jumlah" type="text">
+              <input class="form-control nomor" name="jumlah" id="jumlah" type="text" autocomplete="off">
             </div>
             <div style="clear:both"></div>
             <br>

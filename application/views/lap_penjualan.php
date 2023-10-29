@@ -36,6 +36,8 @@
                 <input type="text" class="form-control datepicker" name="selesai" id="selesai"  value="<?php echo $selesai ?>" autocomplete="off">
               </div>
 
+
+
               <div class="col-sm-3">
                 <select name="id_cabang" id="id_cabang" class="form-control">
                   <option value=""> --- pilih Cabang --- </option>
@@ -47,7 +49,13 @@
                       {
                         $sel="selected";
                       }else{
-                        $sel="";
+                        if($cabang->id_cabang=='1')
+                        {
+                          $sel="selected";
+                        }else{
+                          $sel="";  
+                        }
+                        
                       }
                       echo "
                         <option value='$cabang->id_cabang' $sel>$cabang->kode_cabang - $cabang->nama_cabang</option>
@@ -64,9 +72,53 @@
           </div>
 
 <div class="table-responsive">              
+<table id="" class="table   table-bordered"  cellspacing="0" width="60%">
+  <thead>
+    <tr class="bg-primary">
+      
+      <th width="200px">Cara Bayar</th>
+      <th style='text-align:right'>Total</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    <?php 
+
+    
+      $jum_perbank = 0;      
+      foreach($all_cara_bayar as $perbank)
+      {
+        $jum_perbank+=$perbank->bayars;
+        echo "
+          <tr>
+            
+            <td>$perbank->cara_bayar</td>
+            <td style='text-align:right'>".rupiah($perbank->bayars)."</td>
+            <td></td>
+
+          </tr>
+        ";        
+
+       }  
+    ?>
+
+  
+  </tbody>
+  <tfoot>
+    <tr>
+      <td ><b>Total </b></td><td style='text-align:right'><b><?php echo rupiah($jum_perbank)?></b></td>
+      <tr></tr>
+    </tr>
+  </tfoot>
+</table>
+</div>
+
+
+<div class="table-responsive">              
 <table id="tbl_datanya_barang" class="table  table-striped table-bordered"  cellspacing="0" width="100%">
       <thead>
-        <tr>
+        <tr class="bg-primary">
               
               <th>No</th>                    
               <th>Kasir</th>                     
@@ -80,6 +132,7 @@
               <th>Saldo</th>                     
               <th>Total</th>                     
               <th>Bayar</th>                     
+              <th>Info</th>                     
               <th>Saldo</th>                     
               <th>Struk</th>                     
               
@@ -118,6 +171,7 @@
                 <td align=right>".rupiah($x->saldo)."</td>                
                 <td align=right>".rupiah($total)."</td>                
                 <td align=right>".rupiah($x->bayar)."</td>                
+                <td align=right>".($x->cara_bayar)."</td>                
                 <td align=right>".rupiah($saldo)."</td>                
 
                 <td><a href='".base_url()."index.php/barang/struk_penjualan/".$x->grup_penjualan."' target='blank'>Print</a></td>                                
@@ -194,7 +248,7 @@ $("#download_pdf").on("click",function(){
 
 $(document).ready(function(){
 
-  //$('#tbl_datanya_barang').dataTable();
+  $('#tbl_datanya_barang').dataTable();
 
 });
 $("#judul2").html("DataTable "+document.title);

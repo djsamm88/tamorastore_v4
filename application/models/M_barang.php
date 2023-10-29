@@ -265,12 +265,13 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 										SELECT 
 											a.id_barang, 
 											IFNULL(a.qty,0)-IFNULL(b.qty,0) AS qty
+
 											 FROM 
 											(SELECT id_barang,SUM(jumlah) AS qty FROM `tbl_barang_transaksi` WHERE jenis='masuk' AND id_cabang='$id_cabang'
 											GROUP BY id_barang
 											)a 
 											LEFT JOIN 
-											(SELECT id_barang,SUM(jumlah) AS qty FROM `tbl_barang_transaksi` WHERE jenis='keluar' AND id_cabang='$id_cabang'
+											(SELECT id_barang,SUM(jumlah) AS qty FROM `tbl_barang_transaksi` WHERE (jenis='keluar' OR jenis='pending_keluar') AND id_cabang='$id_cabang'
 											GROUP BY id_barang
 											)b 
 											ON a.id_barang=b.id_barang 
@@ -304,7 +305,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 											GROUP BY id_barang
 											)a 
 											LEFT JOIN 
-											(SELECT id_barang,SUM(jumlah) AS qty FROM `tbl_barang_transaksi` WHERE jenis='keluar' AND id_cabang='$id_cabang'
+											(SELECT id_barang,SUM(jumlah) AS qty FROM `tbl_barang_transaksi` WHERE (jenis='keluar' OR jenis='pending_keluar') AND id_cabang='$id_cabang'
 											GROUP BY id_barang
 											)b 
 											ON a.id_barang=b.id_barang 
@@ -340,7 +341,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 											GROUP BY id_barang
 											)a 
 											LEFT JOIN 
-											(SELECT id_barang,SUM(jumlah) AS qty FROM `tbl_barang_transaksi` WHERE jenis='keluar' AND id_cabang='$id_cabang'
+											(SELECT id_barang,SUM(jumlah) AS qty FROM `tbl_barang_transaksi` WHERE (jenis='keluar' OR jenis='pending_keluar') AND id_cabang='$id_cabang'
 											GROUP BY id_barang
 											)b 
 											ON a.id_barang=b.id_barang 
@@ -375,7 +376,10 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 											GROUP BY id_barang,id_gudang
 											)a 
 											LEFT JOIN 
-											(SELECT id_barang,SUM(jumlah) AS qty,id_gudang FROM `tbl_barang_transaksi` WHERE jenis='keluar' GROUP BY id_barang,id_gudang
+											(SELECT id_barang,SUM(jumlah) AS qty,id_gudang FROM `tbl_barang_transaksi` 
+												WHERE 
+												(jenis='keluar' OR jenis='pending_keluar') 
+												GROUP BY id_barang,id_gudang
 											)b 
 											ON a.id_barang=b.id_barang AND a.id_gudang=b.id_gudang
 								)b
@@ -590,13 +594,13 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 		return $q->num_rows();
 	}
 
-	public function m_return_barang($kondisi=null)
+	public function m_return_barang($kondisi,$mulai,$selesai)
 	{
 		if($kondisi==null)
 		{
 			$where = "";
 		}else{
-			$where = " AND a.kondisi='$kondisi'";
+			$where = " AND a.kondisi='$kondisi '";
 		}
 
 		$q = $this->db->query("SELECT a.*,a.id AS id_ret ,b.*,c.*,d.nama_gudang
@@ -604,10 +608,13 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 								LEFT JOIN tbl_barang b ON a.id_barang=b.id
 								LEFT JOIN tbl_pelanggan c ON a.id_pelanggan=c.id_pelanggan
 								LEFT JOIN tbl_gudang d ON a.id_gudang=d.id_gudang
-								WHERE a.status='toko' $where
-								ORDER BY a.id DESC
+								WHERE a.tgl_trx BETWEEN '$mulai' AND '$selesai' AND (a.status='toko') $where  
+								 ORDER BY a.id DESC
 					");
 		return $q->result();
+
+
+		
 	}
 
 
@@ -771,14 +778,66 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 				a.transport_ke_ekspedisi,
 				a.id_pelanggan,
 				a.bayar,
+				a.cara_bayar,
 				b.nama_admin,
 				b.email_admin 
+
 			FROM tbl_barang_transaksi a
 			LEFT JOIN tbl_admin b ON a.id_admin=b.id_admin
 			WHERE a.jenis='keluar' AND (a.harga_beli <> 0 AND a.harga_jual <> 0) $where 
 				AND a.tgl_transaksi BETWEEN '$mulai' AND '$selesai' AND a.id_cabang='$id_cabang'
 			GROUP BY grup_penjualan
 			ORDER BY tgl_transaksi DESC
+			");
+
+		return $q->result();
+	}
+
+
+
+
+
+	public function m_lap_penjualan_all_cara_bayar($mulai,$selesai,$id_admin='',$id_cabang='')
+	{	
+		$where="";
+		if($id_admin!='')
+		{
+			$where=" AND a.id_admin='$id_admin'";
+		}
+
+
+
+
+		$q = $this->db->query("
+				
+
+				SELECT
+				    a.grup_penjualan,
+				    a.cara_bayar,
+				    SUM(a.bayar) AS bayars
+				FROM
+				    (
+				    SELECT
+				        a.grup_penjualan,
+				        a.bayar,
+				        a.cara_bayar
+				    FROM
+				        tbl_barang_transaksi a
+				    LEFT JOIN tbl_admin b ON
+				        a.id_admin = b.id_admin
+				    WHERE a.jenis='keluar' AND (a.harga_beli <> 0 AND a.harga_jual <> 0) $where 
+							AND a.tgl_transaksi BETWEEN '$mulai' AND '$selesai' AND a.id_cabang='$id_cabang'
+				    GROUP BY
+				        grup_penjualan,
+				        cara_bayar
+				    ORDER BY
+				        tgl_transaksi
+				    DESC
+				) a
+				GROUP BY
+				    a.cara_bayar
+
+
 			");
 
 		return $q->result();

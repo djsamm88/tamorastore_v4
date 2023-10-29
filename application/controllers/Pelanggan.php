@@ -227,6 +227,7 @@ class Pelanggan extends CI_Controller {
 		$id_pelanggan = $serialize['id_pelanggan'];
 		$serialize['id_admin'] = $this->session->userdata('id_admin');
 
+
 		//var_dump($serialize);
 		$xx = $this->db->query("SELECT saldo FROM tbl_pelanggan WHERE id_pelanggan='$id_pelanggan'");
 		$xxx = $xx->result()[0];
@@ -264,6 +265,7 @@ class Pelanggan extends CI_Controller {
 
 		unset($serialize['nama_pembeli']);
 		$serialize['id_cabang'] = $this->session->userdata('id_cabang');
+		$serialize['cara_bayar'] = $serialize['jenis_trx'];
 		$this->m_pelanggan->insert_trx($serialize);
 
 

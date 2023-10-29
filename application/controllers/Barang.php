@@ -204,23 +204,31 @@ class Barang extends CI_Controller {
 
 	public function bayar_sales()
 	{
-		$id = $this->input->post('id');
-		$tgl_bayar = date('Y-m-d H:i:s');
+		
+		var_dump($this->input->post());
 
-		$this->db->query("UPDATE tbl_sales_transaksi SET status_bayar='lunas',tgl_bayar='$tgl_bayar' WHERE id='$id'");
+		foreach($this->input->post('bayar_sales') as $x_id)
+		{
+			$id = $x_id;
+			$tgl_bayar = date('Y-m-d H:i:s');
+
+			$this->db->query("UPDATE tbl_sales_transaksi SET status_bayar='lunas',tgl_bayar='$tgl_bayar' WHERE id='$id'");
 
 
-		//masukin ke tbl_transaksi dengan id 20
+			//masukin ke tbl_transaksi dengan id 20
 
-		$q = $this->db->query("SELECT a.*,b.nama_admin,CONCAT('SALES',b.id_admin) AS id_sales  FROM tbl_sales_transaksi a LEFT JOIN tbl_admin b ON a.id_sales=b.id_admin WHERE a.id='$id'");
-		$all = $q->result();
+			$q = $this->db->query("SELECT a.*,b.nama_admin,CONCAT('SALES',b.id_admin) AS id_sales  FROM tbl_sales_transaksi a LEFT JOIN tbl_admin b ON a.id_sales=b.id_admin WHERE a.id='$id'");
+			$all = $q->result();
 
-		$serialize['keterangan'] = "Kepada Sales A.n: ".$all[0]->nama_admin ." - Id Sales:".$all[0]->id_sales ."- Sejumlah: ".$all[0]->jumlah_trx; 
-		$serialize['jumlah'] = $all[0]->jumlah_trx;
-		$serialize['id_group'] = '20';
-		$serialize['id_cabang']=$this->session->userdata('id_cabang');
-		$this->db->set($serialize);
-		$this->db->insert('tbl_transaksi');
+			$serialize['keterangan'] = "Kepada Sales A.n: ".$all[0]->nama_admin ." - Id Sales:".$all[0]->id_sales ."- Sejumlah: ".$all[0]->jumlah_trx; 
+			$serialize['jumlah'] = $all[0]->jumlah_trx;
+			$serialize['id_group'] = '20';
+			$serialize['id_cabang']=$this->session->userdata('id_cabang');
+			$this->db->set($serialize);
+			$this->db->insert('tbl_transaksi');
+		}
+
+
 
 	}
 
@@ -751,6 +759,16 @@ class Barang extends CI_Controller {
 		$this->load->view('struk',$data);
 	}
 
+	public function struk_pembayaran_sales()
+	{
+		$data['all'] = $this->input->get();
+		
+		
+		
+
+		$this->load->view('struk_pembayaran_sales',$data);
+	}
+
 
 
 	public function slip_barang()
@@ -866,8 +884,20 @@ class Barang extends CI_Controller {
 
 	public function return_barang()
 	{
-		$data['all'] = $this->m_barang->m_return_barang();	
+		
+		$mulai = $this->input->get('mulai');
+		$selesai = $this->input->get('selesai');	
+
+		$data['mulai'] = $mulai;
+		$data['selesai'] = $selesai;
+
+
+		$kondisi = "";
+		$data['all'] = $this->m_barang->m_return_barang($kondisi,$mulai,$selesai);	
 		$data['all_barang'] = $this->m_barang->m_data();	
+
+
+
 		$this->load->view('return_barang',$data);
 	}
 
@@ -974,6 +1004,10 @@ class Barang extends CI_Controller {
 
 	public function return_barang_xl($kondisi=null)
 	{
+		
+		$mulai = $this->input->get('mulai');
+		$selesai = $this->input->get('selesai');
+
 		$file="Laporan_barang_return.xls";
 		
 		
@@ -983,7 +1017,7 @@ class Barang extends CI_Controller {
 		header("Expires: 0");	
 
 
-		$data['all'] = $this->m_barang->m_return_barang($kondisi);
+		$data['all'] = $this->m_barang->m_return_barang($kondisi,$mulai,$selesai);
 		$this->load->view('print_return_barang',$data);
 	}
 
@@ -991,8 +1025,12 @@ class Barang extends CI_Controller {
 	public function print_return_barang($kondisi=null)
 	{
 		
-		
-		$data['all'] = $this->m_barang->m_return_barang($kondisi);
+		$mulai = $this->input->get('mulai');
+		$selesai = $this->input->get('selesai');
+
+
+
+		$data['all'] = $this->m_barang->m_return_barang($kondisi,$mulai,$selesai);
 
 		//var_dump($staff_arr);
 		$filename = "return_barang_".$this->router->fetch_class()."_".date('d_m_y_h_i_s');
@@ -1389,6 +1427,9 @@ class Barang extends CI_Controller {
 		$data['id_cabang'] = $id_cabang;
 
 		$data['all'] = $this->m_barang->m_lap_penjualan($mulai,$selesai,$id_admin,$id_cabang);	
+		$data['all_cara_bayar'] = $this->m_barang->m_lap_penjualan_all_cara_bayar($mulai,$selesai,$id_admin,$id_cabang);	
+
+
 		
 		$this->load->view('lap_penjualan',$data);
 	}
@@ -1414,6 +1455,9 @@ class Barang extends CI_Controller {
 		$data['id_cabang'] = $id_cabang;
 
 		$data['all'] = $this->m_barang->m_lap_penjualan($mulai,$selesai,$id_admin,$id_cabang);	
+		$data['all_cara_bayar'] = $this->m_barang->m_lap_penjualan_all_cara_bayar($mulai,$selesai,$id_admin,$id_cabang);	
+
+
 		$this->load->view('lap_penjualan_batalkan',$data);
 	}
 
@@ -1480,6 +1524,10 @@ class Barang extends CI_Controller {
 		unset($data['id_pelanggan_form']);
 
 		$data['grup_packing'] = date('ymdHis')."_".$this->session->userdata('id_admin');
+
+		if(upload_file('foto_packing')!=""){
+			$data['foto_packing'] = upload_file('foto_packing');	
+		}
 
 		$xxx = explode(",",$xx);
 

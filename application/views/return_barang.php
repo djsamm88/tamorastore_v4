@@ -223,6 +223,51 @@
 
 <br>
 
+<div class="alert alert-info">
+          <form id="go_trx_jurnal">
+              <div class="col-sm-3">
+                  <input type="text" class="form-control datepicker" name="mulai" id="mulai"  value="<?php echo $mulai ?>" autocomplete="off">
+              </div>
+              <div class="col-sm-3">
+                <input type="text" class="form-control datepicker" name="selesai" id="selesai"  value="<?php echo $selesai ?>" autocomplete="off">
+              </div>
+
+
+
+              <div class="col-sm-3">
+                <select name="id_cabang" id="id_cabang" class="form-control">
+                  <option value=""> --- pilih Cabang --- </option>
+                  <?php 
+                    $data_cabang = $this->m_cabang->m_data_cabang();
+                    foreach($data_cabang as $cabang)
+                    {
+                      if($cabang->id_cabang==$id_cabang)
+                      {
+                        $sel="selected";
+                      }else{
+                        if($cabang->id_cabang=='1')
+                        {
+                          $sel="selected";
+                        }else{
+                          $sel="";  
+                        }
+                        
+                      }
+                      echo "
+                        <option value='$cabang->id_cabang' $sel>$cabang->kode_cabang - $cabang->nama_cabang</option>
+                      ";
+                    }
+                  ?>                  
+              </select>
+              </div>
+              <div class="col-sm-2">
+                <input type="submit" class="btn btn-primary btn-block" value="Go">
+              </div>
+          </form>          
+          <div style="clear: both"></div>
+          </div>
+
+<div class="table-responsive">
 <table id="tbl_datanya" class="table  table-striped table-bordered"  cellspacing="0" width="100%">
       <thead>
         <tr>
@@ -233,7 +278,7 @@
               <th>Jumlah</th>                     
               <th>Total Uang kembali</th>                     
               <th>Dari</th>                     
-              <th>No HP</th>                     
+                               
               <th>Kondisi</th>                     
               <th>Gudang</th>                     
               <th>Kasir</th>                     
@@ -264,7 +309,7 @@
                 <td>$x->jumlah</td>                
                 <td>".rupiah($x->uang_kembali)."</td>                
                 <td>$x->nama_pembeli</td>                
-                <td>$x->hp_pembeli</td>                
+                      
                 <td>$x->kondisi</td>                
                 <td>$x->nama_gudang</td>                
                 <td>$x->nama_admin_lama</td>                
@@ -282,12 +327,12 @@
         ?>
       </tbody>
   </table>
-
+</div>
 
 <div class="text-left col-sm-6">
-<a href="<?php echo base_url()?>index.php/barang/print_return_barang/" class="btn btn-primary" target="blank">Print Semua</a>
-<a href="<?php echo base_url()?>index.php/barang/print_return_barang/rusak" class="btn btn-danger" target="blank">Print Rusak</a>
-<a href="<?php echo base_url()?>index.php/barang/print_return_barang/baik" class="btn btn-success" target="blank">Print Baik</a>
+<a href="<?php echo base_url()?>index.php/barang/print_return_barang/?mulai=<?php echo $mulai?>&selesai=<?php echo $selesai?>" class="btn btn-primary" target="blank">Print Semua</a>
+<a href="<?php echo base_url()?>index.php/barang/print_return_barang/rusak?mulai=<?php echo $mulai?>&selesai=<?php echo $selesai?>" class="btn btn-danger" target="blank">Print Rusak</a>
+<a href="<?php echo base_url()?>index.php/barang/print_return_barang/baik?mulai=<?php echo $mulai?>&selesai=<?php echo $selesai?>" class="btn btn-success" target="blank">Print Baik</a>
 </div>
 
 
@@ -534,5 +579,34 @@ $(document).ready(function(){
 });
 
 hanya_nomor(".nomor");
+
+
+
+
+$('.datepicker').datepicker({
+  autoclose: true,
+  format: 'yyyy-mm-dd' 
+})
+
+
+
+
+
+$("#go_trx_jurnal").on("submit",function(){
+    var mulai   = $("#mulai").val();
+    var selesai  = $("#selesai").val();
+    var id_cabang  = $("#id_cabang").val();
+    
+    if( (new Date(mulai).getTime() > new Date(selesai).getTime()))
+    {
+      alert("Perhatikan pengisian tanggal. Ada yang salah.");
+      return false;
+    }
+
+    eksekusi_controller('<?php echo base_url()?>index.php/barang/return_barang/?mulai='+mulai+'&selesai='+selesai+'&id_cabang='+id_cabang,'Laporan Penjualan');
+  return false;
+})
+
+
 
 </script>
